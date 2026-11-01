@@ -1,6 +1,6 @@
 # Round30 FPGA Artifacts
 
-Release tag: `round30-submission-20261101-v2`
+Release tag: `round30-submission-20261101-v3`
 Source project: `Pi-debug-cmd/2026_FPGA`, deployed source revision `a8f6f8f32b159eaea277354118220c633f31fbc2`, task `PL-20261027-01`.
 Implementation evidence: [Round18 integration report](../../report/world_minphase_integration_round18_20261029.md) and [Round30 persistent boot report](../../report/world_minphase_persistent_boot_round30_20261030.md).
 
@@ -24,7 +24,7 @@ The payload, `.bit`, and report hashes are recorded in Round18/Round30 evidence.
 
 ## Verify
 
-Download the Release archive from `https://github.com/Pi-debug-cmd/amd-zynq-world-voice-pl-2026/releases/tag/round30-submission-20261101-v2`, extract it, then run:
+Download the Release archive from `https://github.com/Pi-debug-cmd/amd-zynq-world-voice-pl-2026/releases/tag/round30-submission-20261101-v3`, extract it, then run:
 
 ```powershell
 Get-FileHash -Algorithm SHA256 .\artifacts\round30\world_minphase_swap.bin.gz
