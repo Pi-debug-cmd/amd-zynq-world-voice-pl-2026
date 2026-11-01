@@ -16,8 +16,8 @@ Reference: *FPGA Innovation Design Competition 2026 Topic Guide (AMD)*, section 
 | Reusable Skill with scope and limits | `skill/`, including a PS/PL prompt sequence | Present; the prompt sequence has not been independently forward-tested |
 | AI collaboration prompts, answers, and corrections | `docs/ai_collaboration.md` | Partial; this is a task-focused record, not a full export of every historical chat |
 | Open-source license | Root MIT license for project-authored content; upstream WORLD license retained | Present; see license scope |
-| Final deliverables (`.bit` / `.xsa` / `.hwh`) | Build instructions and generated artifact hashes in source reports | Not included; generated artifacts were absent/ignored in the source repository |
+| Final deliverables (`.bit` / `.xsa` / `.hwh`) | Round30 Release includes the board `.bit`, boot `.bin.gz`, `.hwh`, and routed reports with SHA-256 manifest | Partial; `.xsa` and full vendor project are absent |
 | PYNQ framework | Not used; Linux/PetaLinux C++ PS runtime is used | Not required by the autonomous-topic track; beginner group recommends PYNQ |
 | Final-round material | Official guide also requires a one-page English poster using AMD's template for finalist teams | Not included; template/entry status was not available in this project checkout |
 
-The archive is an honest project package and evidence snapshot. It is not yet a fully closed contest submission. Before claiming full completion, rebuild from a clean environment, regenerate and attach allowed FPGA deliverables, complete valid long-duration speech testing, and document the final application-quality gate.
+The archive is an honest project package and evidence snapshot. It is not yet a fully closed contest submission. The Release closes the missing deployable FPGA payload and handoff-file gap, but cannot replace a clean-room rebuild from the vendor base project, a valid long-duration speech test, or final application-quality evidence. Keep the final-round poster conditional on finalist status and use the official AMD template when it is provided.

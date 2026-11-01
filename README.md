@@ -6,6 +6,8 @@ An AMD FPGA autonomous-topic project package for a real-time WORLD speech pipeli
 
 This is a reproducible source-and-evidence package for the Round30 implementation. It is not a claim that the full speech conversion objective has passed competition acceptance. Round30 proves persistent deployment and automatic startup of the candidate after reboot, with active PL calls and capture/playback PCM state. It does not prove long-duration speech stability, audibility of the prompt, final voice identity, unfamiliar-speaker generalization, or that the whole WORLD pipeline runs in PL. See [the design report](report/DESIGN_REPORT.md) and [the checklist](SUBMISSION_CHECKLIST.md).
 
+The `round30-submission-20261101` GitHub Release contains the matching Round30 board payload, `.bit`, `.hwh`, and routed implementation reports. The source repository intentionally excludes generated binaries. SHA-256 values and provenance are listed in [the artifact manifest](artifacts/round30/MANIFEST.md). A complete clean-room rebuild is still blocked by the untracked vendor audio base project and external tool/image inputs.
+
 ## Platform and implementation
 
 - Board: Wildfire Zynq-7020, device `xc7z020clg400-2`.
@@ -27,6 +29,7 @@ The deployed Round30 source revision is `a8f6f8f32b159eaea277354118220c633f31fbc
 | `sim/` | Deterministic HLS testbench and boot failure-injection tests |
 | `metrics/` | Competition-style metric summary and test entry points |
 | `report/` | Round16-30 design, implementation, board, live-audio, and reboot evidence |
+| `artifacts/round30/` | Hash manifest and validation instructions for Release-only FPGA outputs |
 | `docs/` | Architecture, interfaces, hardware setup, and AI collaboration record |
 | `skill/` | Reusable Vivado MCP, GitHub, DMA, bring-up, and regression notes |
 
@@ -41,13 +44,13 @@ python -m unittest sim.test_world_minphase_boot -v
 sh -n board/world_minphase_autostart.sh board/world_minphase_init.sh board/world_minphase_control.sh
 ```
 
-The recorded HLS test is a deterministic 24-vector comparison against WORLD 0.3.5. Its source is `sim/tb_world_minphase.cpp`; run it using Vivado/Vitis HLS 2026.1 and the WORLD 0.3.5 source path as described in [reproduction](docs/reproduction.md). The HLS C/RTL cosimulation and board evidence are historical results in `report/`; this package does not contain Vivado generated products or a bitstream.
+The recorded HLS test is a deterministic 24-vector comparison against WORLD 0.3.5. Its source is `sim/tb_world_minphase.cpp`; run it using Vivado/Vitis HLS 2026.1 and the WORLD 0.3.5 source path as described in [reproduction](docs/reproduction.md). The HLS C/RTL cosimulation and board evidence are historical results in `report/`. Generated FPGA outputs are attached to the Round30 Release, not committed to Git.
 
 ## Reproduction boundary
 
 Some project inputs are intentionally external: Vivado/Vitis 2026.1, the complete WORLD 0.3.5 source tree used by the build scripts, the vendor audio base project, and the PetaLinux 2022.2 board image. The source repo did not contain the full generated base project or board image. The scripts and exact dependencies are documented, but a clean-room full bitstream rebuild was not possible from tracked files alone. Do not run the board installation scripts on another board without first matching the recorded factory hashes and reviewing the deployment procedure.
 
-Raw human speech, generated audio, bitstreams, Linux images, modules, executables, and Vivado caches are excluded. Audio is not needed to build or test the numeric HLS kernel; synthetic deterministic vectors are used for the kernel regression. Published speech-test summaries are retained, but the audio itself is not redistributed.
+Raw human speech, generated audio, Linux images, modules, executables, and Vivado caches are excluded. The Release contains only the FPGA programming payload and handoff/report files needed to identify the Round30 implementation. Audio is not needed to build or test the numeric HLS kernel; synthetic deterministic vectors are used for the kernel regression. Published speech-test summaries are retained, but the audio itself is not redistributed.
 
 ## AMD track fit
 
