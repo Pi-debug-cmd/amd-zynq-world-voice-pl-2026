@@ -10,6 +10,7 @@ Round9 target identity P10,application,0.4719,cosine,Seed-VC V2 30-step frozen c
 Round9 source identity leakage,application,0.0591,cosine,Strict source leakage metric on a held-out new session,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
 Round9 UTMOS,application,3.0789,score,Predicted naturalness for the frozen offline candidate,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
 Round9 CER,application,0.1020,ratio,Frozen offline candidate transcription error,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
+Round10 subjective target timbre,application,passed,user acceptance,Original listening result accepted by user as pass,one listening trial,report/seed_fixed_male_listening_round10_20261024.md,user_accepted_pass
 Routed Slice LUT,resources,13910,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed Slice Register,resources,20145,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed BRAM tile,resources,9.5,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported

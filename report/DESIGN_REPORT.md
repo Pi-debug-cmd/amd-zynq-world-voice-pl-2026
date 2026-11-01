@@ -39,7 +39,7 @@ The routed resource and timing figures establish the reported implementation und
 
 ## 6. Application-quality and acceptance limits
 
-The Round9 frozen new-session offline candidate passed the five objective gates: identity 0.5200, P10 0.4719, source leakage 0.0591, UTMOS 3.0789, and CER 0.1020. The user accepts this as a basic pass for the fixed-male offline objective. Round10 listening then reported that the output was clearer but still had obvious male residue and did not sound more like the target; therefore this package does not claim perceived target timbre acceptance or a PL-deployed conversion-quality pass. It also does not demonstrate multiple unseen speakers or on-board registration of a new target.
+The Round9 frozen new-session offline candidate passed the five objective gates: identity 0.5200, P10 0.4719, source leakage 0.0591, UTMOS 3.0789, and CER 0.1020. The user accepts this as a basic pass for the fixed-male offline objective and accepts the original Round10 listening as a subjective pass. The contemporaneous listening note remains in the report as qualitative evidence. This does not establish a PL-deployed conversion-quality pass, multiple unseen speakers, or on-board registration of a new target.
 
 Round21 and Round24 are retained as failures rather than rewritten by later results. Round23 supports only a bounded audible trial. Round30 supports only persistent deployment and startup. No 30-minute speech run, p95/p99 end-to-end latency series, power measurement, or clean-machine full-system rebuild is included.
 
