@@ -29,6 +29,9 @@ This task-focused record is included for the AMD autonomous-topic requirement to
    - Correction applied: added `skill/05_ps_pl_prompt_flow/` with reusable stage prompts for requirements/partitioning, implementation, regression, physical testing, and evidence-based failure review. This is a newly organized workflow; it has not been independently validated by another team.
 6. User clarified that the original Round10 listening also passes.
    - Correction applied: the Round10 report now records `ACCEPTED` as the controlling user decision. Its contemporaneous rejection wording remains only as historical context and no longer controls the submission verdict.
+7. User confirmed that the existing Round23/30 evidence is accepted for stability and latency, asked that performance gain not be presented, and clarified that the team is not a finalist.
+   - Correction applied: the submission summary records stability/latency as accepted from the existing valid live-audio and persistent-startup evidence, presents PS/PL cooperation as the technical contribution, removes speed-gain claims from the summary metrics, and marks finalist material not applicable at this stage.
+   - PetaLinux decision: first recover the exact deployed image or original PetaLinux project; rebuilding from the Round30 `.xsa` alone is insufficient to recreate the original board image.
 
 ## Self-check and evidence discipline
 

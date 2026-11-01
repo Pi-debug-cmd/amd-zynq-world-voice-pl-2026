@@ -7,6 +7,8 @@
 - A short external build directory to avoid Windows path-length failures.
 - For board reproduction: the matching PetaLinux 2022.2 root filesystem, original vendor audio project, and a recoverable Zynq-7020 board setup.
 
+The current package does not include a PetaLinux image. See [PetaLinux image acquisition](petalinux_image_acquisition.md) for recovery from the original build or storage media, and the requirements for a clean rebuild.
+
 The full vendor base project and generated implementation checkpoints were external/ignored source-repository inputs. Therefore the following steps reproduce the individual kernel flow and document how the recorded integrated build was run, but this Git repository alone cannot rebuild the final full-system bitstream from an empty machine.
 
 ## HLS kernel simulation and synthesis

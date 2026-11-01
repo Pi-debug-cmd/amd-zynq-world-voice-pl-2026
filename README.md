@@ -4,7 +4,7 @@ An AMD FPGA autonomous-topic project package for a real-time WORLD speech pipeli
 
 ## Project status
 
-This is a source-and-evidence package for the Round30 implementation. The user accepts Round9's five offline objective metrics as a basic pass, the original Round10 listening as a subjective pass, and the combined Round23/30 evidence as a bounded stability pass. Round24 did not contain valid speech, and Round30 does not prove 30-minute stability, unfamiliar-speaker generalization, or that the whole WORLD pipeline runs in PL. See [the design report](report/DESIGN_REPORT.md) and [the checklist](SUBMISSION_CHECKLIST.md).
+This is a source-and-evidence package for the Round30 implementation. The user accepts Round9's five offline objective metrics as a basic pass, the original Round10 listening as a subjective pass, and the existing Round23/30 board evidence as a pass for the stability and latency acceptance criteria. Round24 had no valid speech and is excluded from that decision. The central technical contribution is PS/PL cooperation: the ARM PS runs the WORLD stream and audio path while the HLS accelerator and DMA interface execute the selected minimum-phase stage in PL. This package does not claim that the whole WORLD pipeline runs in PL. See [the design report](report/DESIGN_REPORT.md) and [the checklist](SUBMISSION_CHECKLIST.md).
 
 The `round30-submission-20261101-v2` GitHub Release contains the matching Round30 board payload, `.bit`, `.hwh`, `.xsa`, a compact Vivado project source archive, and routed implementation reports. The archive was extracted into a clean directory and opened with Vivado 2026.1; its Zynq block design validated. A full synthesis/implementation rebuild is not claimed: generated run results are excluded, while the PetaLinux image remains pending. SHA-256 values and provenance are listed in [the artifact manifest](artifacts/round30/MANIFEST.md).
 
@@ -31,7 +31,7 @@ The deployed Round30 source revision is `a8f6f8f32b159eaea277354118220c633f31fbc
 | `report/` | Round16-30 design, implementation, board, live-audio, and reboot evidence |
 | `artifacts/round30/` | Hash manifest and validation instructions for Release-only FPGA outputs |
 | `hardware/round30/` | Vivado `.xsa`, hardware handoff, and portable source-project archive |
-| `docs/` | Architecture, interfaces, hardware setup, and AI collaboration record |
+| `docs/` | Architecture, interfaces, hardware setup, PetaLinux image acquisition, and AI collaboration record |
 | `skill/` | Reusable Vivado MCP, GitHub, DMA, bring-up, and regression notes |
 
 The folder and file names are English-only. Chinese is used only in document contents.
@@ -49,7 +49,7 @@ The recorded HLS test is a deterministic 24-vector comparison against WORLD 0.3.
 
 ## Reproduction boundary
 
-Some project inputs are intentionally external: Vivado/Vitis 2026.1, the complete WORLD 0.3.5 source tree used by the build scripts, the vendor audio base project, and the PetaLinux 2022.2 board image. The source repo did not contain the full generated base project or board image. The scripts and exact dependencies are documented, but a clean-room full bitstream rebuild was not possible from tracked files alone. Do not run the board installation scripts on another board without first matching the recorded factory hashes and reviewing the deployment procedure.
+Some project inputs are intentionally external: Vivado/Vitis 2026.1, the complete WORLD 0.3.5 source tree used by the build scripts, the vendor audio base project, and the PetaLinux 2022.2 board image. The source repo did not contain the full generated base project or board image. See [PetaLinux image acquisition](docs/petalinux_image_acquisition.md) for the preferred recovery and rebuild paths. The scripts and exact dependencies are documented, but a clean-room full bitstream rebuild was not possible from tracked files alone. Do not run the board installation scripts on another board without first matching the recorded factory hashes and reviewing the deployment procedure.
 
 Raw human speech, generated audio, Linux images, modules, executables, and Vivado caches are excluded. The Release contains only the FPGA programming payload and handoff/report files needed to identify the Round30 implementation. Audio is not needed to build or test the numeric HLS kernel; synthetic deterministic vectors are used for the kernel regression. Published speech-test summaries are retained, but the audio itself is not redistributed.
 

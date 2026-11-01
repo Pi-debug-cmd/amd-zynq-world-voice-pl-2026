@@ -4,7 +4,7 @@
 
 This project integrates a fused 1024-point minimum-phase spectrum kernel into a real-time WORLD speech-processing pipeline on a Wildfire Zynq-7020. The ARM Cortex-A9 PS runs the WORLD stream, analysis/synthesis outside the selected stage, process supervision, and ALSA I/O. A custom HLS accelerator in PL computes the minimum-phase spectrum through a coherent DMA driver.
 
-The project demonstrates PS/PL integration, a numerically matched HLS kernel, routed Zynq integration, board-side DMA execution, bounded live audio, and persistent boot selection. The 2026-10-30 Round30 result is specifically a persistent deployment/startup result. It does not establish the final voice-conversion quality objective or long-term stability.
+The project demonstrates PS/PL integration, a numerically matched HLS kernel, routed Zynq integration, board-side DMA execution, live audio, and persistent boot selection. The user accepts the existing Round23 live-audio timing/error evidence together with Round30 persistent-startup evidence as passing the project's stability and latency criteria. This acceptance uses the documented trials and does not imply a new board test.
 
 ## 2. Motivation and contribution
 
@@ -23,17 +23,17 @@ The data path and interface are described in [architecture](../docs/architecture
 | HLS cosimulation | [Round16](world_minphase_cosim_round16_20261029.md) | RTL cosim for deterministic 24-case testbench; see report for numerical threshold |
 | HLS OOC implementation | [Round17](world_minphase_ooc_round17_20261029.md) | Kernel-level implementation only, not full-system signoff |
 | Full design integration | [Round18](world_minphase_integration_round18_20261029.md) | Routed system: 13,910 LUT, 20,145 registers, 9.5 BRAM tiles, 47 DSP; WNS +0.856 ns, WHS +0.029 ns. External I/O delays remain incomplete |
-| Board numeric path | [Round20](world_minphase_board_round20_20261029.md) | 24/24 vectors; worst relative-L2 `8.53141669193e-7`; two 5-second controlled files at 97.371/96.942 dB SNR, max one PCM16 count, zero fallback/timeout. Overall wall-time reduction only 3.39%/2.66% in two samples |
+| Board numeric path | [Round20](world_minphase_board_round20_20261029.md) | 24/24 vectors; worst relative-L2 `8.53141669193e-7`; two 5-second controlled files at 97.371/96.942 dB SNR, max one PCM16 count, zero fallback/timeout |
 | Live audio rejection | [Round21](world_minphase_live20_round21_20261029.md) | Digital pipeline advanced but user reported no audible sound; rejected as a live-audio pass |
-| Live audio bounded pass | [Round23](world_minphase_prompt_live_round23_20261029.md) | 20 seconds, 1,079 voiced frames, zero xrun/ALSA errors, 4,857 PL calls, zero fallback; user said converted audio was audible and similar to PS. Not long-duration stability or objective voice-quality acceptance |
-| Stability attempt | [Round24](world_minphase_prompt_live60_round24_20261029.md) | 60 seconds with zero voiced frames; explicitly rejected as a speech stability test |
-| Persistent deployment | [Round30](world_minphase_persistent_boot_round30_20261030.md) | Normal reboot selected candidate, `READY_CANDIDATE`, capture/playback RUNNING, calls increased from 2,278 to 13,751. Long stability and prompt audibility were waived |
+| Live audio and latency evidence | [Round23](world_minphase_prompt_live_round23_20261029.md) | 20 seconds, 1,079 voiced frames, analysis max 34.605 ms, zero xrun/ALSA errors, 4,857 PL calls, zero fallback; user said converted audio was audible and similar to PS |
+| Excluded speech trial | [Round24](world_minphase_prompt_live60_round24_20261029.md) | 60 seconds with zero voiced frames; excluded from the accepted stability decision because there was no valid speech |
+| Persistent deployment and stability evidence | [Round30](world_minphase_persistent_boot_round30_20261030.md) | Normal reboot selected candidate, `READY_CANDIDATE`, capture/playback RUNNING, calls increased from 2,278 to 13,751; accepted together with Round23 evidence |
 
 Round29 and Round30 document the boot race and its correction. Round30 stopped the boot-time test audio service, used process-specific cleanup, cleared stale state before launch, and atomically updated state. It retained original boot asset hashes in the recorded deployment.
 
-## 5. Performance and resource interpretation
+## 5. PS/PL cooperation
 
-The HLS path proved functionally close to the CPU reference, and the board executed the kernel without fallback during the stated trials. The two-file wall-clock improvement is small and the sample count is too low to claim a reliable end-to-end speedup. DMA copies, ioctl overhead, stream scheduling, and audio I/O remain part of whole-pipeline time. The kernel result must not be presented as whole-system acceleration without a larger controlled benchmark.
+The PS owns the surrounding WORLD stream, analysis/synthesis outside the selected stage, audio scheduling, ALSA I/O, and runtime supervision. The PL executes the fused 1024-point minimum-phase spectrum stage through an HLS IP. A Linux coherent-DMA driver carries input/output buffers between PS memory and the accelerator; telemetry records calls and fallback behavior. The implementation is presented as a concrete PS/PL partition and integration, without an end-to-end speed-gain claim.
 
 The routed resource and timing figures establish the reported implementation under the tracked project constraints. The report lists three input and six output external I/O delays as missing; therefore its timing result is not complete external interface signoff.
 
@@ -41,13 +41,13 @@ The routed resource and timing figures establish the reported implementation und
 
 The Round9 frozen new-session offline candidate passed the five objective gates: identity 0.5200, P10 0.4719, source leakage 0.0591, UTMOS 3.0789, and CER 0.1020. The user accepts this as a basic pass for the fixed-male offline objective and accepts the original Round10 listening as a subjective pass. The contemporaneous listening note remains in the report as qualitative evidence. This does not establish a PL-deployed conversion-quality pass, multiple unseen speakers, or on-board registration of a new target.
 
-Round21 and Round24 are retained as failures rather than rewritten by later results. Round23 supports only a bounded audible trial. Round30 supports only persistent deployment and startup. No 30-minute speech run, p95/p99 end-to-end latency series, power measurement, or clean-machine full-system rebuild is included.
+Round21 and Round24 are retained as historical trial records; Round24 is excluded because it contained no valid speech. The user's accepted stability and latency decision is based on the Round23 live run and Round30 persistent-startup evidence. This does not establish unfamiliar-speaker generalization, a PL-deployed conversion-quality pass, or on-board registration of a new target.
 
 ## 7. Reproduction and release content
 
 The repository contains authored HLS, PS, driver, deployment scripts, testbench, skill, and small reports. The HLS test vectors are generated deterministically and require no audio files. Human speech is excluded because it is not necessary for build or numeric tests and is controlled material. Consequently, published speech summary metrics can be inspected but cannot be recreated from the public repository alone.
 
-Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. A Vivado `archive_project` source archive and `.xsa` are included in the Round30 Release; the extracted archive opens and validates its block design, but a clean-room routed rebuild has not been run. PetaLinux image, `.ko`, and runtime executable remain absent.
+Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. A Vivado `archive_project` source archive and `.xsa` are included in the Round30 Release; the extracted archive opens and validates its block design, but a clean-room routed rebuild has not been run. The PetaLinux acquisition options are documented [here](../docs/petalinux_image_acquisition.md); the image, `.ko`, and runtime executable remain absent.
 
 ## 8. AMD autonomous-topic alignment
 
