@@ -32,6 +32,9 @@ This task-focused record is included for the AMD autonomous-topic requirement to
 7. User confirmed that the existing Round23/30 evidence is accepted for stability and latency, asked that performance gain not be presented, and clarified that the team is not a finalist.
    - Correction applied: the submission summary records stability/latency as accepted from the existing valid live-audio and persistent-startup evidence, presents PS/PL cooperation as the technical contribution, removes speed-gain claims from the summary metrics, and marks finalist material not applicable at this stage.
    - PetaLinux decision: first recover the exact deployed image or original PetaLinux project; rebuilding from the Round30 `.xsa` alone is insufficient to recreate the original board image.
+8. User provided the local PetaLinux installation-material directory and asked to continue completing the submission.
+   - Inspection result: the directory contains only `plnx-env-setup.sh`, an Ubuntu host-dependency setup script, not the PetaLinux tool installer. Ubuntu 20.04 WSL is present. No PetaLinux 2022.2 installer, BSP/project, `.wic`, `BOOT.BIN`, or `image.ub` was found in the searched locations.
+   - Additional verified asset: the 104 MB Vivado `archive_project` ZIP is present locally and its extracted project was opened with Vivado 2026.1; BD validation and IP status reporting completed. It is added as a separate Release asset; implementation run outputs remain excluded.
 
 ## Self-check and evidence discipline
 

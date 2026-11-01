@@ -47,7 +47,7 @@ Round21 and Round24 are retained as historical trial records; Round24 is exclude
 
 The repository contains authored HLS, PS, driver, deployment scripts, testbench, skill, and small reports. The HLS test vectors are generated deterministically and require no audio files. Human speech is excluded because it is not necessary for build or numeric tests and is controlled material. Consequently, published speech summary metrics can be inspected but cannot be recreated from the public repository alone.
 
-Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. A Vivado `archive_project` source archive and `.xsa` are included in the Round30 Release; the extracted archive opens and validates its block design, but a clean-room routed rebuild has not been run. The PetaLinux acquisition options are documented [here](../docs/petalinux_image_acquisition.md); the image, `.ko`, and runtime executable remain absent.
+Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. Compact and full Vivado source archives plus the `.xsa` are included in the Round30 Release; both extracted archives open and validate their block design, but a clean-room routed rebuild has not been run. The PetaLinux acquisition options are documented [here](../docs/petalinux_image_acquisition.md); the image, `.ko`, and runtime executable remain absent.
 
 ## 8. AMD autonomous-topic alignment
 

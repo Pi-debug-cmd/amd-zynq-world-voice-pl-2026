@@ -9,7 +9,7 @@
 
 The current package does not include a PetaLinux image. See [PetaLinux image acquisition](petalinux_image_acquisition.md) for recovery from the original build or storage media, and the requirements for a clean rebuild.
 
-The full vendor base project and generated implementation checkpoints were external/ignored source-repository inputs. Therefore the following steps reproduce the individual kernel flow and document how the recorded integrated build was run, but this Git repository alone cannot rebuild the final full-system bitstream from an empty machine.
+The Release now includes a full Vivado `archive_project` source ZIP with the vendor audio design sources, custom RTL/XDC, IP metadata, and generated IP sources. Synthesis/implementation run outputs are excluded. Therefore the following steps reproduce the individual kernel flow and document the integrated build, but a fresh full-system routed rebuild has not been demonstrated from an empty machine.
 
 ## HLS kernel simulation and synthesis
 

@@ -30,4 +30,8 @@ After a successful PetaLinux build, retain the project/BSP and generated boot fi
 
 ## Current status
 
-No `.wic`, `.bsp`, PetaLinux project, `BOOT.BIN`, or `image.ub` is included in this repository or the Round30 Release. The next practical action is to locate the original image/build owner or make a verified read-only copy of the original boot medium. Only if neither is available should the team start a fresh PetaLinux project.
+The provided local directory named `Petalinux安装文件` contains only `plnx-env-setup.sh`. That script installs Ubuntu host dependencies; it is not the PetaLinux installer. Ubuntu 20.04 is available through WSL, but no PetaLinux 2022.2 `.run` installer was found in the searched download and project locations. No `.wic`, `.bsp`, PetaLinux project, `BOOT.BIN`, or `image.ub` is included in this repository or the Round30 Release.
+
+The two Wildfire tutorial `rootfs.tar.gz` files in the资料盘 belong to separate Zynq-7020/Zynq-7010 tutorial Linux trees. They are not the recorded PetaLinux 2022.2 system image and must not be substituted for it.
+
+The next practical action is to obtain the official PetaLinux 2022.2 installer from AMD's download portal using an authorized account, and locate the original PetaLinux project/BSP and matching XSA. Alternatively, recover a verified read-only image from the original board boot medium. A fresh build cannot proceed from the environment setup script and Round30 `.xsa` alone.
