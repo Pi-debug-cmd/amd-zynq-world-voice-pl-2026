@@ -18,5 +18,6 @@ Reference: *FPGA Innovation Design Competition 2026 Topic Guide (AMD)*, section 
 | Open-source license | Root MIT license for project-authored content; upstream WORLD license retained | Present; see license scope |
 | Final deliverables (`.bit` / `.xsa` / `.hwh`) | Build instructions and generated artifact hashes in source reports | Not included; generated artifacts were absent/ignored in the source repository |
 | PYNQ framework | Not used; Linux/PetaLinux C++ PS runtime is used | Not required by the autonomous-topic track; beginner group recommends PYNQ |
+| Final-round material | Official guide also requires a one-page English poster using AMD's template for finalist teams | Not included; template/entry status was not available in this project checkout |
 
 The archive is an honest project package and evidence snapshot. It is not yet a fully closed contest submission. Before claiming full completion, rebuild from a clean environment, regenerate and attach allowed FPGA deliverables, complete valid long-duration speech testing, and document the final application-quality gate.
