@@ -24,6 +24,9 @@ This task-focused record is included for the AMD autonomous-topic requirement to
 4. User emphasized that this should be treated as a complete project submission.
    - Assistant decision: create the README, architecture/interface/setup/reproduction docs, design report, metrics table, skill, source, scripts, tests, and key evidence.
    - Correction applied: “complete project package” is not equated with “all acceptance gates passed.” Round30 only proves persistent deployment and reboot startup. Long speech stability, final voice quality, full clean-room system rebuild, and generated FPGA deliverables remain explicit gaps.
+5. User asked: “提示词流有吗” (Does a prompt flow exist?).
+   - Assistant checked the published skill directory and found collaboration notes and hardware/debug skills, but no explicit prompt sequence.
+   - Correction applied: added `skill/05_ps_pl_prompt_flow/` with reusable stage prompts for requirements/partitioning, implementation, regression, physical testing, and evidence-based failure review. This is a newly organized workflow; it has not been independently validated by another team.
 
 ## Self-check and evidence discipline
 

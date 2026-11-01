@@ -13,7 +13,7 @@ Reference: *FPGA Innovation Design Competition 2026 Topic Guide (AMD)*, section 
 | System/voice application objective | Reports preserve speech trials and target limits | Incomplete; no final voice identity or objective conversion-quality pass |
 | Stability and recovery | Round30 reboot recovery; Round24 records an invalid no-speech run | Incomplete; no valid 30-minute speech stability result |
 | English-only path and file names | All package paths use English ASCII names | Present |
-| Reusable Skill with scope and limits | `skill/` | Present; only project-local clean deployment has been evidenced |
+| Reusable Skill with scope and limits | `skill/`, including a PS/PL prompt sequence | Present; the prompt sequence has not been independently forward-tested |
 | AI collaboration prompts, answers, and corrections | `docs/ai_collaboration.md` | Partial; this is a task-focused record, not a full export of every historical chat |
 | Open-source license | Root MIT license for project-authored content; upstream WORLD license retained | Present; see license scope |
 | Final deliverables (`.bit` / `.xsa` / `.hwh`) | Build instructions and generated artifact hashes in source reports | Not included; generated artifacts were absent/ignored in the source repository |
