@@ -10,6 +10,7 @@ build/generated/
 *.wdb
 *.xsa
 hardware/round30/voice7020_project_sources.zip
+hardware/round30/voice7020_project_sources.tar.gz
 *.hwh
 *.elf
 *.o

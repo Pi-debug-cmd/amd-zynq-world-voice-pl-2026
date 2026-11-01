@@ -1,0 +1,14 @@
+{
+  "part": "xc7z020clg400-2",
+  "raw_bytes": 4045564,
+  "raw_sha256": "2e8517d9d126261fd397ec76e3209b111d9cee232d6374bdc9bb099473d79117",
+  "swap_sha256": "1bc4b3f8f5e5f1b722b0772b9aad23af3c60579dc3c81c44c8d86b408c429373",
+  "compressed_bytes": 536768,
+  "compressed_sha256": "6a7fec9987d31c5f803b79b1bb8e115dca9fda0dfc278b8f462d60562b628d98",
+  "ap_ctrl_base": "0x43c70000",
+  "pointer_args_base": "0x43c80000",
+  "ddr_port": "S_AXI_HP2",
+  "bins": 513,
+  "format": "float32 log spectrum -> float32 complex filter",
+  "boot_partition_modified": false
+}

@@ -18,7 +18,7 @@ The archive includes these files:
 | `bus_skew.txt` | 75314 | `4179efc918c1699096d6f84a3cf381ded90f66d16cde1da75355ba35d14cc8c4` | Routed bus-skew report |
 | `world_minphase_bit_manifest.json` | 569 | `8aa5ef115d09acb5c693bd6817a1ebe477b7894baf6ef0511c5c742a659f714e` | Machine-readable payload metadata and raw/swap hashes |
 | `voice7020.xsa` | 958768 | `fc69ad520846b27dcdc1620778f28371f7ef477c521a56d9d40c12dbefbba3cc` | Exported hardware platform with embedded bitstream |
-| `voice7020_project_sources.zip` | 104087259 | `37f22a2e37af3290c1826a5257a5148771a8a6307da1355e5f4f32c2772d851d` | Vivado project source archive; run results excluded |
+| `voice7020_project_sources.tar.gz` | 626213 | `12d723cd4cd9e384d196ea105a4a6be200aee50ebb12398ad71e6d7cf869fd5f` | Compact Vivado project source archive; generated netlists and run results excluded |
 
 The payload, `.bit`, and report hashes are recorded in Round18/Round30 evidence. The `.hwh` and JSON manifest hashes are computed from the preserved Vivado export and packaged manifest. The XSA embedded `voice7020.bit` SHA-256 was verified equal to the standalone `.bit`. The release archive itself is the transfer unit.
 
@@ -38,4 +38,4 @@ Compare results with the table above. The `.bit` and `.hwh` are the Round18 full
 
 ## Limits
 
-The Vivado project source archive includes the vendor audio design source and local IP inputs captured by Vivado `archive_project`; its extracted project opened and passed block-design validation in a clean directory. A full routed rebuild from scratch was not run. The PetaLinux image, Linux kernel module, and runtime executable are not included. External audio I/O delays remain incomplete in the routed timing constraints. Review the checklist before treating this as final contest acceptance.
+The compact source archive includes the Zynq block design, project configuration, imported RTL/XDC, Digilent audio clock IP, and packaged HLS core. Its extracted project opened and passed block-design validation in Vivado 2026.1. Generated IP netlists and run products are intentionally excluded; a full routed rebuild from scratch was not run. The PetaLinux image, Linux kernel module, and runtime executable are not included. External audio I/O delays remain incomplete in the routed timing constraints. Review the checklist before treating this as final contest acceptance.
