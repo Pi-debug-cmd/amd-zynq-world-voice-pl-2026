@@ -1,0 +1,29 @@
+# Vivado/Vitis output and generated binaries
+build/generated/
+*.jou
+*.log
+*.pb
+*.dcp
+*.bit
+*.bin
+*.ltx
+*.wdb
+*.xsa
+*.hwh
+*.elf
+*.o
+*.obj
+*.a
+*.ko
+*.exe
+*.dll
+*.pyc
+__pycache__/
+.Xil/
+
+# Human/generated audio and temporary data
+*.wav
+*.pcm
+*.f32
+*.s16
+tmp/
