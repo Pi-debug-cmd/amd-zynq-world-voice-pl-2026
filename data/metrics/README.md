@@ -5,7 +5,7 @@
 Validate that the CSV is well-formed and every evidence path exists:
 
 ```sh
-python metrics/scripts/validate_metrics.py
+python data/metrics/scripts/validate_metrics.py
 ```
 
 The historical reports preserve the exact scope of each trial. The project-level acceptance is based on the combined Round23 and Round30 evidence and does not change the underlying trial records.

@@ -14,7 +14,7 @@ The engineering contribution is the end-to-end integration and recovery behavior
 
 ## 3. Architecture and interface
 
-The data path and interface are described in [architecture](../docs/architecture.md) and [interface](../docs/interface.md). The HLS function consumes 513 float32 log-spectrum bins and produces 513 complex float32 filter bins for a 1024-point transform. Two AXI-Lite control windows are assigned at `0x43C70000` and `0x43C80000`. HLS input and output masters use a dedicated interconnect to PS HP2 DDR. The recorded clock is 100 MHz from `FCLK_CLK0`.
+The data path and interface are described in [architecture](architecture.md) and [interface](interface.md). The HLS function consumes 513 float32 log-spectrum bins and produces 513 complex float32 filter bins for a 1024-point transform. Two AXI-Lite control windows are assigned at `0x43C70000` and `0x43C80000`. HLS input and output masters use a dedicated interconnect to PS HP2 DDR. The recorded clock is 100 MHz from `FCLK_CLK0`.
 
 ## 4. Design and validation history
 
@@ -47,8 +47,8 @@ Round21 and Round24 are retained as historical trial records; Round24 is exclude
 
 The repository contains authored HLS, PS, driver, deployment scripts, testbench, skill, and small reports. The HLS test vectors are generated deterministically and require no audio files. Human speech is excluded because it is not necessary for build or numeric tests and is controlled material. Consequently, published speech summary metrics can be inspected but cannot be recreated from the public repository alone.
 
-Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. Compact and full Vivado source archives plus the `.xsa` are included in the Round30 Release; both extracted archives open and validate their block design, but a clean-room routed rebuild has not been run. The PetaLinux acquisition options are documented [here](../docs/petalinux_image_acquisition.md); the image, `.ko`, and runtime executable remain absent.
+Full reproduction limits and exact commands are in [reproduction](reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. Compact and full Vivado source archives plus the `.xsa` are included in the Round30 Release; both extracted archives open and validate their block design, but a clean-room routed rebuild has not been run. The PetaLinux acquisition options are documented [here](../board/petalinux_image_acquisition.md); the image, `.ko`, and runtime executable remain absent.
 
 ## 8. AMD autonomous-topic alignment
 
-Section 3.3 permits HLS, RTL, PS software, and their combination, and requires a board-run work with measured output. Zynq-7000 is permitted. The implementation method is eligible for that track; it does not use PYNQ. PYNQ is a recommendation for the beginner group rather than a universal requirement. The requirement-by-requirement status is in [SUBMISSION_CHECKLIST.md](../SUBMISSION_CHECKLIST.md).
+Section 3.3 permits HLS, RTL, PS software, and their combination, and requires a board-run work with measured output. Zynq-7000 is permitted. The implementation method is eligible for that track; it does not use PYNQ. PYNQ is a recommendation for the beginner group rather than a universal requirement. The requirement-by-requirement status is in [SUBMISSION_CHECKLIST.md](SUBMISSION_CHECKLIST.md).

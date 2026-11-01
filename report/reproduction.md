@@ -7,7 +7,7 @@
 - A short external build directory to avoid Windows path-length failures.
 - For board reproduction: the matching PetaLinux 2022.2 root filesystem, original vendor audio project, and a recoverable Zynq-7020 board setup.
 
-The current package does not include a PetaLinux image. See [PetaLinux image acquisition](petalinux_image_acquisition.md) for recovery from the original build or storage media, and the requirements for a clean rebuild.
+The current package does not include a PetaLinux image. See [PetaLinux image acquisition](../board/petalinux_image_acquisition.md) for recovery from the original build or storage media, and the requirements for a clean rebuild.
 
 The Release now includes a full Vivado `archive_project` source ZIP with the vendor audio design sources, custom RTL/XDC, IP metadata, and generated IP sources. Synthesis/implementation run outputs are excluded. Therefore the following steps reproduce the individual kernel flow and document the integrated build, but a fresh full-system routed rebuild has not been demonstrated from an empty machine.
 

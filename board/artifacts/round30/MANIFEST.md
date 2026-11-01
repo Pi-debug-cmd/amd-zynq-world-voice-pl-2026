@@ -2,7 +2,7 @@
 
 Release tag: `round30-submission-20261101-v4`
 Source project: `Pi-debug-cmd/2026_FPGA`, deployed source revision `a8f6f8f32b159eaea277354118220c633f31fbc2`, task `PL-20261027-01`.
-Implementation evidence: [Round18 integration report](../../report/world_minphase_integration_round18_20261029.md) and [Round30 persistent boot report](../../report/world_minphase_persistent_boot_round30_20261030.md).
+Implementation evidence: [Round18 integration report](../../../report/world_minphase_integration_round18_20261029.md) and [Round30 persistent boot report](../../../report/world_minphase_persistent_boot_round30_20261030.md).
 
 The archive includes these files:
 
@@ -25,15 +25,15 @@ The payload, `.bit`, and report hashes are recorded in Round18/Round30 evidence.
 
 ## Verify
 
-Download the Release assets from `https://github.com/Pi-debug-cmd/amd-zynq-world-voice-pl-2026/releases/tag/round30-submission-20261101-v4`, extract the submission ZIP and/or source archives, then run:
+Download the Release assets from `https://github.com/Pi-debug-cmd/amd-zynq-world-voice-pl-2026/releases/tag/round30-submission-20261101-v4`, extract them into the corresponding `board/artifacts/round30/` and `board/hardware/round30/` paths, then run:
 
 ```powershell
-Get-FileHash -Algorithm SHA256 .\artifacts\round30\world_minphase_swap.bin.gz
-Get-FileHash -Algorithm SHA256 .\artifacts\round30\zynq_wrapper.bit
-Get-FileHash -Algorithm SHA256 .\artifacts\round30\zynq.hwh
-Get-FileHash -Algorithm SHA256 .\hardware\round30\voice7020.xsa
-Get-FileHash -Algorithm SHA256 .\hardware\round30\voice7020_project_sources.tar.gz
-Get-FileHash -Algorithm SHA256 .\hardware\round30\voice7020_project_sources.zip
+Get-FileHash -Algorithm SHA256 .\board\artifacts\round30\world_minphase_swap.bin.gz
+Get-FileHash -Algorithm SHA256 .\board\artifacts\round30\zynq_wrapper.bit
+Get-FileHash -Algorithm SHA256 .\board\artifacts\round30\zynq.hwh
+Get-FileHash -Algorithm SHA256 .\board\hardware\round30\voice7020.xsa
+Get-FileHash -Algorithm SHA256 .\board\hardware\round30\voice7020_project_sources.tar.gz
+Get-FileHash -Algorithm SHA256 .\board\hardware\round30\voice7020_project_sources.zip
 ```
 
 Compare results with the table above. The `.bit` and `.hwh` are the Round18 full-system implementation used by this candidate. Round30 changed persistent deployment/startup behavior and reused the same hardware image; the deployed compressed payload hash confirms that identity.

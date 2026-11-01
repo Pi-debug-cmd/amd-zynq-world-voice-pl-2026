@@ -14,7 +14,7 @@ Reference: *FPGA Innovation Design Competition 2026 Topic Guide (AMD)*, section 
 | Stability and latency acceptance | Round23: 20-second valid speech, analysis max 34.605 ms, zero xrun/ALSA errors/fallback; Round30: rebooted candidate with PL calls increasing from 2,278 to 13,751 | Pass by user acceptance based on existing board evidence; Round24 is excluded because it had no valid speech |
 | English-only path and file names | All package paths use English ASCII names | Present |
 | Reusable Skill with scope and limits | `skill/`, including a PS/PL prompt sequence | Present; the prompt sequence has not been independently forward-tested |
-| AI collaboration prompts, answers, and corrections | `docs/ai_collaboration.md` | Partial; this is a task-focused record, not a full export of every historical chat |
+| AI collaboration prompts, answers, and corrections | `report/AI_COLLABORATION.md` | Partial; this is a task-focused record, not a full export of every historical chat |
 | Open-source license | Root MIT license for project-authored content; upstream WORLD license retained | Present; see license scope |
 | Final deliverables (`.bit` / `.xsa` / `.hwh`) | Round30 Release includes `.bit`, `.bin.gz`, `.hwh`, `.xsa`, source-project archive, and routed reports with SHA-256 manifest | Present; PetaLinux image remains pending |
 | PYNQ framework | Not used; Linux/PetaLinux C++ PS runtime is used | Not required by the autonomous-topic track; beginner group recommends PYNQ |
