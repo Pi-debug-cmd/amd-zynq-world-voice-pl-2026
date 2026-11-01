@@ -31,7 +31,7 @@ Get-FileHash -Algorithm SHA256 .\artifacts\round30\world_minphase_swap.bin.gz
 Get-FileHash -Algorithm SHA256 .\artifacts\round30\zynq_wrapper.bit
 Get-FileHash -Algorithm SHA256 .\artifacts\round30\zynq.hwh
 Get-FileHash -Algorithm SHA256 .\hardware\round30\voice7020.xsa
-Get-FileHash -Algorithm SHA256 .\hardware\round30\voice7020_project_sources.zip
+Get-FileHash -Algorithm SHA256 .\hardware\round30\voice7020_project_sources.tar.gz
 ```
 
 Compare results with the table above. The `.bit` and `.hwh` are the Round18 full-system implementation used by this candidate. Round30 changed persistent deployment/startup behavior and reused the same hardware image; the deployed compressed payload hash confirms that identity.

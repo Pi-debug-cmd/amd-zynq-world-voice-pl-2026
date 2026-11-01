@@ -27,6 +27,8 @@ This task-focused record is included for the AMD autonomous-topic requirement to
 5. User asked: “提示词流有吗” (Does a prompt flow exist?).
    - Assistant checked the published skill directory and found collaboration notes and hardware/debug skills, but no explicit prompt sequence.
    - Correction applied: added `skill/05_ps_pl_prompt_flow/` with reusable stage prompts for requirements/partitioning, implementation, regression, physical testing, and evidence-based failure review. This is a newly organized workflow; it has not been independently validated by another team.
+6. User clarified that the original Round10 listening also passes.
+   - Correction applied: the Round10 report now records `ACCEPTED` as the controlling user decision. Its contemporaneous rejection wording remains only as historical context and no longer controls the submission verdict.
 
 ## Self-check and evidence discipline
 
