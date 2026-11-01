@@ -39,7 +39,7 @@ The routed resource and timing figures establish the reported implementation und
 
 ## 6. Application-quality and acceptance limits
 
-The broader target is target-voice registration and conversion of unregistered speakers. This Round30 package does not demonstrate that application-level objective. The accepted evidence shows an existing WORLD voice chain with a minphase stage in PL. It does not show target identity thresholds, source leakage, MOS/CER gates, multiple unseen speakers, or on-board registration of a new target. The companion repository's current project plan and voice-quality evidence remain separate from this narrow accelerator package.
+The Round9 frozen new-session offline candidate passed the five objective gates: identity 0.5200, P10 0.4719, source leakage 0.0591, UTMOS 3.0789, and CER 0.1020. The user accepts this as a basic pass for the fixed-male offline objective. Round10 listening then reported that the output was clearer but still had obvious male residue and did not sound more like the target; therefore this package does not claim perceived target timbre acceptance or a PL-deployed conversion-quality pass. It also does not demonstrate multiple unseen speakers or on-board registration of a new target.
 
 Round21 and Round24 are retained as failures rather than rewritten by later results. Round23 supports only a bounded audible trial. Round30 supports only persistent deployment and startup. No 30-minute speech run, p95/p99 end-to-end latency series, power measurement, or clean-machine full-system rebuild is included.
 
@@ -47,7 +47,7 @@ Round21 and Round24 are retained as failures rather than rewritten by later resu
 
 The repository contains authored HLS, PS, driver, deployment scripts, testbench, skill, and small reports. The HLS test vectors are generated deterministically and require no audio files. Human speech is excluded because it is not necessary for build or numeric tests and is controlled material. Consequently, published speech summary metrics can be inspected but cannot be recreated from the public repository alone.
 
-Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, vendor audio base project, Vivado/Vitis installation, and PetaLinux image were not tracked. Generated `.bit`, `.xsa`, `.hwh`, `.ko`, executables, and Vivado outputs are also absent. A clean-room full-system rebuild and artifact regeneration are required before final contest hand-in.
+Full reproduction limits and exact commands are in [reproduction](../docs/reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. A Vivado `archive_project` source archive and `.xsa` are included in the Round30 Release; the extracted archive opens and validates its block design, but a clean-room routed rebuild has not been run. PetaLinux image, `.ko`, and runtime executable remain absent.
 
 ## 8. AMD autonomous-topic alignment
 

@@ -9,6 +9,7 @@ build/generated/
 *.ltx
 *.wdb
 *.xsa
+hardware/round30/voice7020_project_sources.zip
 *.hwh
 *.elf
 *.o
