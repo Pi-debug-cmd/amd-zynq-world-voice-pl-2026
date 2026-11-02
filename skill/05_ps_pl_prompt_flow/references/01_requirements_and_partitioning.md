@@ -1,28 +1,28 @@
-# Stage 1: Requirements and Partitioning
+# 阶段 1：需求分析与软硬件划分
 
-Use before proposing a PS/PL boundary.
+提出 PS/PL 划分方案前使用。
 
 ```text
-Act as the design reviewer for this AMD Zynq project.
+请担任本 AMD Zynq 项目的设计评审人。
 
-Goal: [user-visible function and target acceptance]
-Board/part: [exact board and part]
-OS/tool versions: [PS OS, Vivado/Vitis versions]
-Current source revision: [full commit SHA]
-Input/output contract: [formats, rates, dimensions, timing]
-Measured baseline: [profile or reference data, with evidence paths]
-Constraints: [latency, resources, power, memory, licensing, offline/online]
-Open gates and ownership: [current status and responsible person]
+目标：[用户可见的功能和目标验收标准]
+板卡/器件：[准确的板卡和器件型号]
+操作系统/工具版本：[PS 操作系统、Vivado/Vitis 版本]
+当前源码版本：[完整提交 SHA]
+输入/输出约定：[格式、速率、维度、时序]
+已测基线：[性能分析或参考数据及证据路径]
+约束：[延迟、资源、功耗、内存、许可、离线/在线要求]
+未通过的门槛和任务归属：[当前状态和负责人]
 
-Using only those facts and the attached source/evidence:
-1. Restate the measurable acceptance criteria and identify missing facts.
-2. Identify the measured bottleneck; distinguish profiling data from assumption.
-3. Compare PS-only, PL-offload, and any justified alternative.
-4. Recommend the smallest hardware boundary that can be measured against a golden reference.
-5. Specify its input/output types, units, scaling, memory ownership, registers/DMA, timeout/fallback behavior, and error budget.
-6. Give a one-variable experiment and the exact evidence needed to accept or reject it.
+仅根据以上信息和附带的源码/证据执行以下任务：
+1. 重述可测量的验收标准，并指出缺少的信息。
+2. 找出已测得的性能瓶颈；区分性能分析数据与假设。
+3. 比较纯 PS、PL 卸载及其他有依据的方案。
+4. 推荐能够与黄金参考结果进行测量对比的最小硬件划分边界。
+5. 明确该边界的输入/输出类型、单位、缩放、内存所有权、寄存器/DMA、超时/回退行为和误差预算。
+6. 提出只改变一个变量的实验，并列出通过或否决所需的准确证据。
 
-Do not write implementation code yet. Do not claim a performance gain or board capability that is not in the supplied evidence. If a preceding quality or functional gate is open, say whether PL work should wait.
+暂时不要编写实现代码。不要声称获得了证据中未体现的性能提升或板卡能力。如果前序质量或功能门槛仍未通过，请说明 PL 工作是否应当暂缓。
 ```
 
-Before implementation, compare the result with the actual task owner and project rules. In the WORLD Round30 work, only the fixed minimum-phase stage was in the deployed PL candidate; profiling other WORLD stages did not make them part of that candidate.
+实现前，应让实际任务负责人按项目规则审查方案。在 WORLD Round30 项目中，已部署的 PL 候选版本只包含固定的最小相位阶段；对其他 WORLD 阶段进行性能分析，并不意味着它们也属于该候选版本。

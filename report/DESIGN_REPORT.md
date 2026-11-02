@@ -1,54 +1,54 @@
-# WORLD Minphase PS+PL Design Report
+# WORLD 最小相位 PS+PL 设计报告
 
-## 1. Summary
+## 1. 项目摘要
 
-This project integrates a fused 1024-point minimum-phase spectrum kernel into a real-time WORLD speech-processing pipeline on a Wildfire Zynq-7020. The ARM Cortex-A9 PS runs the WORLD stream, analysis/synthesis outside the selected stage, process supervision, and ALSA I/O. A custom HLS accelerator in PL computes the minimum-phase spectrum through a coherent DMA driver.
+本项目将融合式 1024 点最小相位频谱核接入 Wildfire Zynq-7020 上的实时 WORLD 语音处理流程。ARM Cortex-A9 PS 运行 WORLD 数据流、选定阶段以外的分析与合成、进程管理和 ALSA 音频输入输出。PL 中的定制 HLS 加速器通过缓存一致的 DMA 驱动计算最小相位频谱。
 
-The project demonstrates PS/PL integration, a numerically matched HLS kernel, routed Zynq integration, board-side DMA execution, live audio, and persistent boot selection. The user accepts the existing Round23 live-audio timing/error evidence together with Round30 persistent-startup evidence as passing the project's stability and latency criteria. This acceptance uses the documented trials and does not imply a new board test.
+项目展示了 PS/PL 集成、数值匹配的 HLS 核、Zynq 整机布线集成、板端 DMA 执行、实时音频和持久化启动选择。用户接受已有 Round23 实时音频时序/错误证据与 Round30 持久启动证据，作为项目稳定性和延迟标准的通过依据。该结论基于已记录的测试，不代表进行了新的板端测试。
 
-## 2. Motivation and contribution
+## 2. 选题背景与贡献
 
-WORLD's minimum-phase stage constructs a complex synthesis filter from a log spectral envelope. Its FFT/cepstrum/exp path is a clear hardware boundary: fixed transform size, bounded input/output, deterministic numerical comparison, and a measurable call counter. The implementation fuses transform and nonlinear operations in one HLS IP and connects it to PS DDR through HP2, rather than treating the FPGA as an I/O adapter.
+WORLD 最小相位阶段根据对数频谱包络构造复数合成滤波器。其 FFT/倒谱/指数运算链具备清晰的硬件划分边界：变换长度固定、输入输出范围明确、可进行确定性数值比较，并有可测量的调用计数器。本实现将变换和非线性运算融合在一个 HLS IP 中，并通过 HP2 接入 PS DDR，使 FPGA 承担实际计算，而非仅作为输入输出适配器。
 
-The engineering contribution is the end-to-end integration and recovery behavior around that accelerator: PS hook selection, a Linux coherent-DMA interface, bounded driver behavior, audio runtime telemetry, verified candidate installation, and boot fallback/guard controls. This work is an implementation contribution; it does not claim a new speech-conversion model.
+工程贡献在于围绕该加速器完成端到端集成和恢复控制，包括 PS 后端选择、Linux 缓存一致 DMA 接口、有界驱动行为、音频运行时遥测、候选版本验证安装，以及启动回退/保护控制。这是工程实现贡献，不声称提出了新的语音转换模型。
 
-## 3. Architecture and interface
+## 3. 架构与接口
 
-The data path and interface are described in [architecture](architecture.md) and [interface](interface.md). The HLS function consumes 513 float32 log-spectrum bins and produces 513 complex float32 filter bins for a 1024-point transform. Two AXI-Lite control windows are assigned at `0x43C70000` and `0x43C80000`. HLS input and output masters use a dedicated interconnect to PS HP2 DDR. The recorded clock is 100 MHz from `FCLK_CLK0`.
+数据通路和接口见[系统架构](architecture.md)与[接口说明](interface.md)。HLS 函数输入 513 个 `float32` 对数频谱点，并为 1024 点变换输出 513 个复数 `float32` 滤波器频点。两个 AXI-Lite 控制窗口分别映射到 `0x43C70000` 和 `0x43C80000`。HLS 输入、输出主接口通过专用互连连接至 PS HP2 DDR。记录的时钟来自 `FCLK_CLK0`，频率为 100 MHz。
 
-## 4. Design and validation history
+## 4. 设计与验证过程
 
-| Stage | Evidence | Result and limit |
+| 阶段 | 证据 | 结果与限制 |
 | --- | --- | --- |
-| HLS cosimulation | [Round16](world_minphase_cosim_round16_20261029.md) | RTL cosim for deterministic 24-case testbench; see report for numerical threshold |
-| HLS OOC implementation | [Round17](world_minphase_ooc_round17_20261029.md) | Kernel-level implementation only, not full-system signoff |
-| Full design integration | [Round18](world_minphase_integration_round18_20261029.md) | Routed system: 13,910 LUT, 20,145 registers, 9.5 BRAM tiles, 47 DSP; WNS +0.856 ns, WHS +0.029 ns. External I/O delays remain incomplete |
-| Board numeric path | [Round20](world_minphase_board_round20_20261029.md) | 24/24 vectors; worst relative-L2 `8.53141669193e-7`; two 5-second controlled files at 97.371/96.942 dB SNR, max one PCM16 count, zero fallback/timeout |
-| Live audio rejection | [Round21](world_minphase_live20_round21_20261029.md) | Digital pipeline advanced but user reported no audible sound; rejected as a live-audio pass |
-| Live audio and latency evidence | [Round23](world_minphase_prompt_live_round23_20261029.md) | 20 seconds, 1,079 voiced frames, analysis max 34.605 ms, zero xrun/ALSA errors, 4,857 PL calls, zero fallback; user said converted audio was audible and similar to PS |
-| Excluded speech trial | [Round24](world_minphase_prompt_live60_round24_20261029.md) | 60 seconds with zero voiced frames; excluded from the accepted stability decision because there was no valid speech |
-| Persistent deployment and stability evidence | [Round30](world_minphase_persistent_boot_round30_20261030.md) | Normal reboot selected candidate, `READY_CANDIDATE`, capture/playback RUNNING, calls increased from 2,278 to 13,751; accepted together with Round23 evidence |
+| HLS 协同仿真 | [Round16](world_minphase_cosim_round16_20261029.md) | 对确定性 24 组测试平台进行了 RTL 协同仿真；数值门槛见对应报告 |
+| HLS OOC 实现 | [Round17](world_minphase_ooc_round17_20261029.md) | 仅为计算核级实现，不代表整机签核 |
+| 整机设计集成 | [Round18](world_minphase_integration_round18_20261029.md) | 布线整机：13,910 LUT、20,145 个寄存器、9.5 个 BRAM tile、47 个 DSP；WNS +0.856 ns，WHS +0.029 ns。外部 I/O 延迟约束仍不完整 |
+| 板端数值通路 | [Round20](world_minphase_board_round20_20261029.md) | 24/24 组向量通过；最差相对 L2 为 `8.53141669193e-7`；两个 5 秒受控文件的 SNR 为 97.371/96.942 dB，最大误差 1 个 PCM16 计数，无回退/超时 |
+| 实时音频测试否决 | [Round21](world_minphase_live20_round21_20261029.md) | 数字流程正常运行，但用户反馈没有听到声音，因此未通过实时音频测试 |
+| 实时音频与延迟证据 | [Round23](world_minphase_prompt_live_round23_20261029.md) | 20 秒、1,079 个浊音帧、分析最大耗时 34.605 ms、无 xrun/ALSA 错误、4,857 次 PL 调用、无回退；用户反馈转换音频可听，听感与 PS 接近 |
+| 不纳入结论的语音测试 | [Round24](world_minphase_prompt_live60_round24_20261029.md) | 运行 60 秒但有效浊音帧为零；因缺少有效语音，不纳入已接受的稳定性判定 |
+| 持久部署与稳定性证据 | [Round30](world_minphase_persistent_boot_round30_20261030.md) | 正常重启后选择候选版本，状态为 `READY_CANDIDATE`，采集/播放均为 RUNNING，调用数从 2,278 增至 13,751；与 Round23 证据合并后被接受 |
 
-Round29 and Round30 document the boot race and its correction. Round30 stopped the boot-time test audio service, used process-specific cleanup, cleared stale state before launch, and atomically updated state. It retained original boot asset hashes in the recorded deployment.
+Round29 和 Round30 记录了启动竞争问题及其修正。Round30 停止了启动时的测试音频服务，只清理指定进程，启动前清除过期状态，并以原子方式更新状态文件。记录的部署保留了原始启动制品哈希。
 
-## 5. PS/PL cooperation
+## 5. PS/PL 协作
 
-The PS owns the surrounding WORLD stream, analysis/synthesis outside the selected stage, audio scheduling, ALSA I/O, and runtime supervision. The PL executes the fused 1024-point minimum-phase spectrum stage through an HLS IP. A Linux coherent-DMA driver carries input/output buffers between PS memory and the accelerator; telemetry records calls and fallback behavior. The implementation is presented as a concrete PS/PL partition and integration, without an end-to-end speed-gain claim.
+PS 负责 WORLD 周边数据流、选定阶段以外的分析与合成、音频调度、ALSA 输入输出和运行时管理。PL 通过 HLS IP 执行融合式 1024 点最小相位频谱阶段。Linux 缓存一致 DMA 驱动在 PS 内存与加速器之间传送输入输出缓冲区；遥测数据记录调用次数和回退行为。本项目呈现具体的 PS/PL 划分与集成，不宣称端到端性能提升。
 
-The routed resource and timing figures establish the reported implementation under the tracked project constraints. The report lists three input and six output external I/O delays as missing; therefore its timing result is not complete external interface signoff.
+布线后的资源和时序数字说明该实现满足报告所列的工程约束。报告同时列明仍缺少 3 条输入和 6 条输出外部 I/O 延迟约束，因此该时序结果不构成完整的外部接口时序签核。
 
-## 6. Application-quality and acceptance limits
+## 6. 应用质量与验收边界
 
-The Round9 frozen new-session offline candidate passed the five objective gates: identity 0.5200, P10 0.4719, source leakage 0.0591, UTMOS 3.0789, and CER 0.1020. The user accepts this as a basic pass for the fixed-male offline objective and accepts the original Round10 listening as a subjective pass. The contemporaneous listening note remains in the report as qualitative evidence. This does not establish a PL-deployed conversion-quality pass, multiple unseen speakers, or on-board registration of a new target.
+Round9 冻结的新会话离线候选通过五项客观门槛：身份指标 0.5200、P10 0.4719、源泄漏 0.0591、UTMOS 3.0789、CER 0.1020。用户将其确认作为固定男性输入者离线目标的基本通过，并确认原始 Round10 听感通过。同期听感记录作为定性证据保留在报告中。这些结果不能证明 PL 部署后的转换音质通过、对多个陌生说话人的泛化能力，或板上注册新目标声源的能力。
 
-Round21 and Round24 are retained as historical trial records; Round24 is excluded because it contained no valid speech. The user's accepted stability and latency decision is based on the Round23 live run and Round30 persistent-startup evidence. This does not establish unfamiliar-speaker generalization, a PL-deployed conversion-quality pass, or on-board registration of a new target.
+Round21 和 Round24 作为历史测试记录保留；Round24 没有有效语音，因此不纳入结论。用户接受的稳定性和延迟判定依据是 Round23 实时测试与 Round30 持久启动证据。这不能证明陌生说话人泛化、PL 部署后的转换音质通过，或板上注册新目标声源的能力。
 
-## 7. Reproduction and release content
+## 7. 复现方式与 Release 内容
 
-The repository contains authored HLS, PS, driver, deployment scripts, testbench, skill, and small reports. The HLS test vectors are generated deterministically and require no audio files. Human speech is excluded because it is not necessary for build or numeric tests and is controlled material. Consequently, published speech summary metrics can be inspected but cannot be recreated from the public repository alone.
+仓库包含自编写的 HLS、PS、驱动、部署脚本、测试平台、技能包和小型报告。HLS 测试向量可确定性生成，不需要音频文件。人声素材不属于构建或数值测试的必需内容，且属于受控素材，因此不纳入提交。公开仓库可供查看已发布的语音指标摘要，但无法单独重建这些语音测试。
 
-Full reproduction limits and exact commands are in [reproduction](reproduction.md). The external WORLD 0.3.5 tree, Vivado/Vitis installation, and PetaLinux image remain external. Compact and full Vivado source archives plus the `.xsa` are included in the Round30 Release; both extracted archives open and validate their block design, but a clean-room routed rebuild has not been run. The PetaLinux acquisition options are documented [here](../board/petalinux_image_acquisition.md); the image, `.ko`, and runtime executable remain absent.
+完整复现限制和精确命令见[复现说明](reproduction.md)。WORLD 0.3.5 外部源码、Vivado/Vitis 安装和 PetaLinux 镜像仍需外部提供。Round30 Release 包含精简和完整 Vivado 源码包及 `.xsa`；两个源码包均可解压打开并验证 Block Design，但尚未在干净环境中重新完成布线。PetaLinux 获取方式见[此处](../board/petalinux_image_acquisition.md)；镜像、`.ko` 模块和运行时可执行文件尚未提供。
 
-## 8. AMD autonomous-topic alignment
+## 8. AMD 自主命题赛道适配
 
-Section 3.3 permits HLS, RTL, PS software, and their combination, and requires a board-run work with measured output. Zynq-7000 is permitted. The implementation method is eligible for that track; it does not use PYNQ. PYNQ is a recommendation for the beginner group rather than a universal requirement. The requirement-by-requirement status is in [SUBMISSION_CHECKLIST.md](SUBMISSION_CHECKLIST.md).
+第 3.3 节允许采用 HLS、RTL、PS 软件及其组合，并要求作品上板运行且有测量输出。Zynq-7000 属于允许器件。本项目的实现方式符合该赛道的技术范围，且未使用 PYNQ。PYNQ 是初学组的建议，并非所有赛道的统一要求。逐项要求状态见[提交清单](SUBMISSION_CHECKLIST.md)。

@@ -1,11 +1,11 @@
-# Data and Metrics
+# 数据与指标
 
-This directory contains the compact, text-based measurement index used by the submission. Human speech, generated audio, model weights, and other controlled or generated data are intentionally not included.
+本目录包含本次提交使用的精简文本测量索引，不包含人声、生成音频、模型权重及其他受控或生成数据。
 
-- `metrics/metrics.csv` links each summarized result to its report under `report/`.
-- `metrics/scripts/validate_metrics.py` checks the CSV schema and verifies that every referenced evidence report exists.
+- `metrics/metrics.csv` 将各项结果摘要链接到 `report/` 中的对应报告。
+- `metrics/scripts/validate_metrics.py` 检查 CSV 格式，并验证所引用的证据报告均存在。
 
-Run the validator from the repository root:
+在仓库根目录运行校验脚本：
 
 ```sh
 python data/metrics/scripts/validate_metrics.py

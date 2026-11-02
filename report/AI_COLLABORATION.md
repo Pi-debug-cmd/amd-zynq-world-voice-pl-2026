@@ -1,45 +1,45 @@
-# AI Collaboration Record
+# AI 协作记录
 
-This task-focused record is included for the AMD autonomous-topic requirement to document model-assisted engineering and corrections. It summarizes the packaging conversation and source evidence rather than reproducing unrelated private project chat.
+本记录用于满足 AMD 自主命题赛道对模型辅助工程和纠错过程的记录要求。内容总结了项目打包过程及源码证据，不复述无关的私人项目对话。
 
-## Work item
+## 工作事项
 
-- Date: 2026-11-01.
-- Source project: `Pi-debug-cmd/2026_FPGA`, branch `agent/Pi-debug-cmd/PL-20261027-01`.
-- Round30 implementation revision: `a8f6f8f32b159eaea277354118220c633f31fbc2`.
-- Later branch head inspected for provenance only: `6f0d68ba367c920afbef2aa7f7265a5d0176edd3`.
-- User direction: make the 2026-10-30 Round30 PS+PL solution a complete submission project, create a corresponding GitHub project, and include audio only if it is necessary.
+- 日期：2026-11-01。
+- 源项目：`Pi-debug-cmd/2026_FPGA`，分支 `agent/Pi-debug-cmd/PL-20261027-01`。
+- Round30 实现版本：`a8f6f8f32b159eaea277354118220c633f31fbc2`。
+- 仅用于来源确认的后续分支提交：`6f0d68ba367c920afbef2aa7f7265a5d0176edd3`。
+- 用户要求：将 2026-10-30 的 Round30 PS+PL 方案整理为完整参赛项目，建立对应的 GitHub 项目，并仅在必要时包含音频。
 
-## Prompts and decisions
+## 提示词与决策
 
-1. User asked to package the 2026-10-30 Round30 PS+PL work, not the earlier generic PS+PL experiment.
-   - Assistant decision: pin the exact source branch and commit, then read the Round30 report before selecting files.
-   - Correction applied: the source PR is still open, so the package records its source SHA and keeps this work in an independent repository.
-2. User requested a full submission directory and permitted audio if necessary.
-   - Assistant decision: check compilation/test dependencies and distribution constraints before including assets.
-   - Correction applied: raw human audio is not required by the HLS build or deterministic synthetic vectors; it is excluded and the report states this limits reproduction of listening tests.
-3. User had clarified earlier that the project under discussion is the PS+PL implementation and asked about PYNQ conversion.
-   - Assistant decision: classify it against the official AMD autonomous-topic track text.
-   - Correction applied: the project is Linux/PetaLinux C++ PS plus HLS PL, not PYNQ; section 3.3 allows PS software with HLS/RTL, while PYNQ is only recommended for the beginner group.
-4. User emphasized that this should be treated as a complete project submission.
-   - Assistant decision: create the README, architecture/interface/setup/reproduction docs, design report, metrics table, skill, source, scripts, tests, and key evidence.
-   - Correction applied: “complete project package” is not equated with “all acceptance gates passed.” Round30 only proves persistent deployment and reboot startup. Long speech stability, final voice quality, full clean-room system rebuild, and generated FPGA deliverables remain explicit gaps.
-5. User asked: “提示词流有吗” (Does a prompt flow exist?).
-   - Assistant checked the published skill directory and found collaboration notes and hardware/debug skills, but no explicit prompt sequence.
-   - Correction applied: added `skill/05_ps_pl_prompt_flow/` with reusable stage prompts for requirements/partitioning, implementation, regression, physical testing, and evidence-based failure review. This is a newly organized workflow; it has not been independently validated by another team.
-6. User clarified that the original Round10 listening also passes.
-   - Correction applied: the Round10 report now records `ACCEPTED` as the controlling user decision. Its contemporaneous rejection wording remains only as historical context and no longer controls the submission verdict.
-7. User confirmed that the existing Round23/30 evidence is accepted for stability and latency, asked that performance gain not be presented, and clarified that the team is not a finalist.
-   - Correction applied: the submission summary records stability/latency as accepted from the existing valid live-audio and persistent-startup evidence, presents PS/PL cooperation as the technical contribution, removes speed-gain claims from the summary metrics, and marks finalist material not applicable at this stage.
-   - PetaLinux decision: first recover the exact deployed image or original PetaLinux project; rebuilding from the Round30 `.xsa` alone is insufficient to recreate the original board image.
-8. User provided the local PetaLinux installation-material directory and asked to continue completing the submission.
-   - Inspection result: the directory contains only `plnx-env-setup.sh`, an Ubuntu host-dependency setup script, not the PetaLinux tool installer. Ubuntu 20.04 WSL is present. No PetaLinux 2022.2 installer, BSP/project, `.wic`, `BOOT.BIN`, or `image.ub` was found in the searched locations.
-   - Additional verified asset: the 104 MB Vivado `archive_project` ZIP is present locally and its extracted project was opened with Vivado 2026.1; BD validation and IP status reporting completed. It is added as a separate Release asset; implementation run outputs remain excluded.
+1. 用户要求打包 2026-10-30 的 Round30 PS+PL 工作，而不是更早的通用 PS+PL 实验。
+   - 助手决策：先锁定准确的源码分支和提交，再阅读 Round30 报告并选择文件。
+   - 已修正：源项目 PR 仍处于开放状态，因此项目包记录了来源 SHA，并将本次打包放在独立仓库中。
+2. 用户要求生成完整提交目录，并允许在必要时包含音频。
+   - 助手决策：纳入素材前先检查构建/测试依赖和分发限制。
+   - 已修正：HLS 构建和确定性合成向量不需要原始人声，因此排除人声，并在报告中说明这会限制听感测试的复现。
+3. 用户此前已明确所讨论的是 PS+PL 实现，并询问是否迁移到 PYNQ。
+   - 助手决策：对照 AMD 官方自主命题赛道文本判断项目适配情况。
+   - 已修正：项目采用 Linux/PetaLinux 上的 C++ PS 和 HLS PL，并非 PYNQ；第 3.3 节允许 PS 软件与 HLS/RTL 组合，PYNQ 仅是初学组建议。
+4. 用户强调应将其作为完整项目提交。
+   - 助手决策：创建 README、架构/接口/配置/复现文档、设计报告、指标表、技能包、源码、脚本、测试及关键证据。
+   - 已修正：“完整项目包”不等同于“所有验收门槛均已通过”。Round30 仅证明持久部署和重启启动。长时语音稳定性、最终音质、干净环境整机重建以及 FPGA 生成物仍需明确说明。
+5. 用户询问“提示词流有吗”。
+   - 助手检查了已发布的技能目录，发现协作笔记和硬件/调试技能，但没有明确的提示词序列。
+   - 已修正：新增 `skill/05_ps_pl_prompt_flow/`，包含需求/划分、实现、回归、实体测试和基于证据的失败复盘等可复用阶段提示词。该流程是新整理的，尚未经其他团队独立验证。
+6. 用户澄清原始 Round10 听感也通过。
+   - 已修正：Round10 报告现以 `ACCEPTED` 记录用户最终决定；同期记录中的否决表述仅作历史背景保留，不再决定提交结论。
+7. 用户确认接受已有 Round23/30 证据作为稳定性和延迟依据，要求不宣称性能收益，并说明团队尚未进入决赛。
+   - 已修正：提交摘要依据已有有效实时音频和持久启动证据记录稳定性/延迟验收；将 PS/PL 协作作为技术贡献，不在指标摘要中声称加速收益，并注明现阶段不适用决赛材料。
+   - PetaLinux 处理决定：先恢复实际部署的镜像或原始 PetaLinux 工程；仅凭 Round30 `.xsa` 不足以还原原板卡镜像。
+8. 用户提供本地 PetaLinux 安装资料目录，并要求继续完成提交材料。
+   - 检查结果：该目录只有 `plnx-env-setup.sh`，这是 Ubuntu 主机依赖安装脚本，不是 PetaLinux 工具安装程序。WSL 中有 Ubuntu 20.04。在已检查的位置没有找到 PetaLinux 2022.2 安装程序、BSP/工程、`.wic`、`BOOT.BIN` 或 `image.ub`。
+   - 另一个已核实的制品：本地有 104 MB Vivado `archive_project` ZIP；其解压工程已在 Vivado 2026.1 中打开，并完成 BD 验证和 IP 状态报告。该 ZIP 已作为独立 Release 附件提供；不包含实现运行输出。
 
-## Self-check and evidence discipline
+## 自查与证据规范
 
-- Compared the package scope to AMD guide sections 3.3.2-3.3.5.
-- Used the Round20 numeric board report, Round21 audibility rejection, Round23 bounded audible test, Round24 no-speech rejection, and Round30 persistent boot report together.
-- Kept the fused minphase kernel claim separate from whole-WORLD acceleration.
-- Did not include Round31-34 exploratory synthesis-pulse work as a deployed Round30 feature.
-- Did not include audio, bitstreams, PetaLinux images, or build products.
+- 对照 AMD 指南第 3.3.2 至 3.3.5 节检查项目包范围。
+- 综合参考 Round20 板端数值报告、Round21 可听性否决记录、Round23 限时可听测试、Round24 无有效语音测试和 Round30 持久启动报告。
+- 将融合最小相位核的贡献与整个 WORLD 流程的加速区分开。
+- 未将 Round31-34 的探索性合成脉冲工作写成已部署的 Round30 功能。
+- 未将音频、位流、PetaLinux 镜像或构建产物纳入 Git 仓库。

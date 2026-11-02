@@ -1,18 +1,18 @@
-# Hardware Setup
+# 硬件平台与配置
 
-## Recorded platform
+## 已记录的平台
 
 - Board: Wildfire Zynq-7020 development board.
 - Device: `xc7z020clg400-2`.
-- FPGA toolchain: Vivado/Vitis 2026.1.
-- Board software: PetaLinux 2022.2, Linux 5.15.0-xilinx.
-- Audio codec: WM8960; the tested physical chain used the external microphone input and speaker/headphone output described in the source project's hardware notes.
-- Recorded ALSA transport: 32 kHz, S24_LE, two channels; the WORLD algorithm's internal stream is mono 16 kHz.
+- FPGA 工具链：Vivado/Vitis 2026.1。
+- 板端软件：PetaLinux 2022.2、Linux 5.15.0-xilinx。
+- 音频编解码器：WM8960；测试所用物理链路为外接麦克风输入，以及源工程硬件说明中的扬声器/耳机输出。
+- 已记录的 ALSA 传输格式：32 kHz、S24_LE、双声道；WORLD 算法内部数据流为 16 kHz 单声道。
 
-This is not a PYNQ-Z2 board image or a PYNQ overlay package. It is a Linux/PetaLinux deployment using a custom bitstream, an out-of-tree kernel module, a C++ runtime, and init scripts.
+这不是 PYNQ-Z2 板卡镜像或 PYNQ Overlay 软件包，而是基于 Linux/PetaLinux 的部署，包含自定义位流、外置内核模块、C++ 运行时和初始化脚本。
 
-## Safe reproduction boundary
+## 复现与部署边界
 
-The persistent deployment scripts verify factory hashes and are tied to the exact original image and board state used in 2026-10-30. They are not generic installers. Before adapting them, obtain a recoverable image, verify all baseline files on the target, inspect every absolute path and expected hash, and prepare a rollback plan. The project reports record preservation checks for the original boot files; they do not authorize running these scripts on an arbitrary board.
+持久化部署脚本会核对出厂文件哈希，并且只针对 2026-10-30 使用的特定原始镜像和板卡状态，不是通用安装程序。改造脚本前，应先取得可恢复的镜像、核对目标设备上的全部基线文件、检查每个绝对路径和预期哈希，并准备回滚方案。项目报告记录了原始启动文件的保留检查，但这不代表可以在任意板卡上直接运行这些脚本。
 
-No fresh board operation, microphone capture, playback, or listening test is performed by packaging this repository. Any new physical audio test needs the operator's readiness confirmation and a newly recorded trial.
+整理本仓库期间没有进行新的板端操作、麦克风采集、音频播放或试听。任何新的实体音频测试都需要当次操作者确认准备就绪，并记录为一轮新的测试。

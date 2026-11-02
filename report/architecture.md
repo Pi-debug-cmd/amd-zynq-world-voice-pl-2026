@@ -1,35 +1,35 @@
-# Architecture and Data Flow
+# 系统架构与数据流
 
 ```mermaid
 flowchart LR
-  Mic[WM8960 audio input] --> ALSA[PS Linux ALSA capture]
-  ALSA --> Runtime[ARM Cortex-A9 WORLD streaming runtime]
-  Runtime --> Analyze[WORLD analysis on PS]
-  Analyze --> Hook[Minimum-phase backend hook]
-  Hook --> Driver[Linux world_minphase DMA driver]
-  Driver --> HP2[AXI HP2 coherent DDR path]
-  HP2 --> HLS[HLS fused 1024-point minphase core in PL]
+  Mic[WM8960 音频输入] --> ALSA[PS Linux ALSA 采集]
+  ALSA --> Runtime[ARM Cortex-A9 WORLD 流处理运行时]
+  Runtime --> Analyze[PS 上的 WORLD 分析]
+  Analyze --> Hook[最小相位后端接口]
+  Hook --> Driver[Linux world_minphase DMA 驱动]
+  Driver --> HP2[AXI HP2 缓存一致 DDR 通路]
+  HP2 --> HLS[PL 中的 HLS 融合 1024 点最小相位核]
   HLS --> HP2
   HP2 --> Driver
   Driver --> Hook
-  Hook --> Synthesis[WORLD synthesis on PS]
-  Synthesis --> ALSAout[PS Linux ALSA playback]
-  ALSAout --> Codec[WM8960 audio output]
+  Hook --> Synthesis[PS 上的 WORLD 合成]
+  Synthesis --> ALSAout[PS Linux ALSA 播放]
+  ALSAout --> Codec[WM8960 音频输出]
 ```
 
-The accelerator transforms one 513-bin log spectrum into a 513-bin complex minimum-phase filter. It performs two 1024-point FFT passes and folds the exponential, cosine, and sine work into the HLS kernel. The surrounding WORLD analysis and synthesis algorithms, queueing, and ALSA capture/playback remain on the ARM PS.
+加速器将 513 点对数频谱转换为 513 点复数最小相位滤波器。它执行两次 1024 点 FFT，并在 HLS 核中融合指数、余弦和正弦运算。周边 WORLD 分析与合成算法、队列管理以及 ALSA 录放音仍由 ARM PS 执行。
 
-## Why this split
+## 划分依据
 
-Profiling in the source project identified WORLD synthesis as a major PS cost, but the accepted Round30 candidate is a narrower HLS migration of the minimum-phase analysis stage. A broader FFT or synthesis-pulse exploration exists in later rounds and is not silently included in this package's deployed candidate. The PL contribution is a real numerical kernel called through AXI/DMA; it is not a generic I/O bridge.
+源项目的性能分析显示 WORLD 合成是 PS 的主要开销之一，但已接受的 Round30 候选方案只将最小相位分析阶段迁移到 HLS。后续轮次中还探索了更大范围的 FFT 和合成脉冲处理，但这些内容没有被混入本提交包所对应的已部署候选版本。PL 执行的是通过 AXI/DMA 调用的实际数值计算核，而非通用输入输出桥接逻辑。
 
-## Evidence boundary
+## 证据范围
 
-- Round16: host/HLS numerical comparison and RTL cosimulation.
-- Round17: out-of-context implementation of the kernel.
-- Round18: routed integration in the audio system, under the constraints recorded in its report.
-- Round20: board vector and file numeric comparison.
-- Round23: bounded 20-second live audio with user-confirmed audible output.
-- Round30: reboot persistence and active PL runtime counters.
+- Round16：主机/HLS 数值对比及 RTL 协同仿真。
+- Round17：该核的独立模块实现（OOC）。
+- Round18：在报告所列约束下完成音频系统整机布线集成。
+- Round20：板端向量和文件数值对比。
+- Round23：20 秒限时实时音频测试，用户确认听到声音。
+- Round30：重启后保持部署状态，并确认 PL 运行计数器递增。
 
-Each result proves a different property; see the individual reports in `report/`.
+每项结果验证的属性不同，详情见 `report/` 中的对应报告。
