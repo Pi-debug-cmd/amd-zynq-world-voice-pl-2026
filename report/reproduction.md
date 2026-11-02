@@ -49,3 +49,17 @@ sh -n board/world_minphase_autostart.sh board/world_minphase_init.sh board/world
 ```
 
 这些测试不会操作板卡。`report/` 中的板端证据来自单独开展的历史测试。软件构建过程中不得自动运行安装程序或测试音频。
+
+## 设计报告 PDF
+
+仓库提供 `output/pdf/design_report_cn.pdf`。如需从 Markdown 源文件重新生成，安装 `reportlab` 和 `mistune`，并提供支持中文的 TrueType 常规/粗体字体：
+
+```powershell
+uv pip install reportlab mistune
+python build/render_design_report_pdf.py `
+  --font-regular 'C:/Windows/Fonts/Deng.ttf' `
+  --font-bold 'C:/Windows/Fonts/Dengb.ttf' `
+  --github-branch agent/Pi-debug-cmd/SUBMIT-20261101-02
+```
+
+默认输入为 `report/DESIGN_REPORT.md`，默认输出为 `output/pdf/design_report_cn.pdf`。字体文件由操作系统提供，不随本项目分发。

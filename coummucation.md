@@ -22,3 +22,15 @@
 - 结果：提交包中原为英文的说明文档已改为中文；指标校验通过（23 行均有证据文件）；启动逻辑测试 2 项通过、2 项因 Windows 主机没有 POSIX `sh` 而跳过；`git diff --check` 通过。
 - 限制：本轮仅修改文档，不涉及硬件、Vivado、PetaLinux 或音频测试；两个依赖 POSIX Shell 的用例未运行。
 - 下一责任方：Codex 完成文档检查后，由仓库维护者审查。
+
+## SUBMIT-20261101-02 - 2026-11-02 - 设计报告 PDF
+
+- 状态：PROPOSED
+- 角色：Codex
+- 基准提交：`ada17d7`
+- 改动：将 `report/DESIGN_REPORT.md` 排版生成可搜索的中文版 A4 PDF，并在项目 README 和提交清单中加入入口。
+- 路径：`output/pdf/design_report_cn.pdf`、`README.md`、`report/SUBMISSION_CHECKLIST.md`、`coummucation.md`。
+- 复现/检查：`uv pip install reportlab mistune`；`python build/render_design_report_pdf.py --font-regular C:/Windows/Fonts/Deng.ttf --font-bold C:/Windows/Fonts/Dengb.ttf --github-branch agent/Pi-debug-cmd/SUBMIT-20261101-02`；用 `pdfinfo`、PyMuPDF 文本提取和 Poppler 页面渲染检查。
+- 结果：2 页 A4；PDF 179,075 字节；中文文本可提取；两页均已渲染检查，表格列宽、跨页表头、页眉和页码正常。
+- 限制：当前构建环境使用 Windows DengXian 字体；字体文件由操作系统提供，不随本项目分发。
+- 下一责任方：仓库维护者审查并合并 PR。

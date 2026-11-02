@@ -6,6 +6,8 @@
 
 这是 Round30 实现的源代码与证据包。用户确认 Round9 的五项离线客观指标基本通过、原始 Round10 听感通过，并接受已有 Round23/30 板端证据作为稳定性和延迟验收依据。Round24 没有有效语音，因此不纳入该结论。项目的主要技术点是 PS/PL 协作：ARM PS 运行 WORLD 流程和音频链路，HLS 加速器通过 DMA 接口在 PL 中执行选定的最小相位阶段。本项目没有声称整个 WORLD 流程都运行在 PL 中。详见[设计报告](report/DESIGN_REPORT.md)和[提交清单](report/SUBMISSION_CHECKLIST.md)。
 
+设计报告也提供[中文版 PDF](output/pdf/design_report_cn.pdf)，可直接作为评审材料。
+
 GitHub Release `round30-submission-20261101-v4` 包含对应的 Round30 板端载荷、`.bit`、`.hwh`、`.xsa`、精简 Vivado 源码包、完整 `archive_project` Vivado 源码包及布线实现报告。两个源码包均已解压到干净目录，并在 Vivado 2026.1 中打开；其中的 Zynq Block Design 均通过验证。完整源码包包含生成的 IP 源码，但不含综合/实现运行输出，因此不声称已完成全流程布线重建。PetaLinux 镜像仍待补齐。SHA-256 和来源信息见[制品清单](board/artifacts/round30/MANIFEST.md)。
 
 ## 平台与实现
@@ -33,6 +35,7 @@ GitHub Release `round30-submission-20261101-v4` 包含对应的 Round30 板端�
 | `board/hardware/round30/` | Vivado `.xsa`、硬件交接文件和可移植源码包（Release 附件） |
 | `board/` | 板卡配置、部署脚本、运行时清单和 PetaLinux 镜像获取说明 |
 | `report/` | 设计报告、架构、接口、复现指南、提交清单和 AI 协作记录 |
+| `output/pdf/` | 可直接提交的中文版设计报告 PDF |
 | `skill/` | 可复用的 Vivado MCP、GitHub、DMA、板级启动和回归经验 |
 
 目录名和文件名使用英文 ASCII；文档正文使用中文。
