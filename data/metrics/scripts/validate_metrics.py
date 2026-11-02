@@ -1,8 +1,8 @@
 import csv
 from pathlib import Path
 
-ROOT = Path(__file__).resolve().parents[2]
-METRICS = ROOT / "metrics" / "metrics.csv"
+ROOT = Path(__file__).resolve().parents[3]
+METRICS = ROOT / "data" / "metrics" / "metrics.csv"
 
 with METRICS.open(newline="", encoding="utf-8") as stream:
     rows = list(csv.DictReader(stream))

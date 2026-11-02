@@ -1,13 +1,13 @@
-# Reusable Skills
+# 可复用技能包
 
-This directory records workflows derived from the Zynq PS+PL development. The notes can help another team bring up a Linux-based Zynq design, check DMA data movement, compare accelerator output with a golden model, and use Vivado MCP with disciplined Git/GitHub reviews. They are not tied to speech conversion, though board-specific commands still need adaptation.
+本目录记录了 Zynq PS+PL 开发过程中总结的工作流程，可帮助其他团队启动基于 Linux 的 Zynq 设计、检查 DMA 数据传输、将加速器输出与黄金参考模型对比，并通过 Vivado MCP 和规范的 Git/GitHub 审查协作。这些经验不局限于语音转换，但板卡专用命令仍需按实际平台调整。
 
-| Skill | Use | Procedure | Failure conditions | Evidence/source |
+| 技能目录 | 用途 | 流程 | 失效条件 | 证据/来源 |
 | --- | --- | --- | --- | --- |
-| `01_board_bringup/` | Establish FPGA/PS state before testing | Check tool version/device, board state, factory hashes, service and PCM status | Wrong image, unverified board state, stale service or missing rollback path | Round30 deployment and recovery reports |
-| `02_dma_coherency/` | Integrate AXI DMA-backed accelerator buffers | Keep PS/PL address, alignment, coherency, ownership, timeout, and recovery contracts explicit | Stale cache, unaligned buffer, unbounded wait, mismatched register/packet contract | `src/kernel/world_minphase_dma.c`, Round20 numeric comparison |
-| `03_golden_compare/` | Verify HLS/PL outputs against trusted software | Freeze input vectors, compare error metrics and call/fallback counters, keep one variable per round | Unfrozen input, wrong transform scale, fallback hidden as PL success, or test scope overclaimed | Round16, Round20; failures documented in `references/round_lessons.md` |
-| `04_vivado_mcp_git_github/` | Run Vivado through MCP and publish traceable task work | Verify Vivado version/part/session, use checked-in Tcl, inspect reports, claim a task, commit/push a scoped change and PR | Wrong installation/device registry, shared session ownership unclear, long MCP command hangs, policy-invalid commit, or evidence stronger than the test | This project has used the tool/debug and collaboration workflow; cross-board reuse is not yet measured |
-| `05_ps_pl_prompt_flow/` | Structure AI-assisted PS/PL partitioning, implementation, verification, and failure review | Follow the stage prompts in order, replacing bracketed fields with measured project facts | Missing constraints/evidence, open ownership conflict, unconfirmed physical test, or an unverified result being presented as accepted | Derived from this package and project rounds; the prompt set itself has not yet been independently forward-tested |
+| `01_board_bringup/` | 测试前确认 FPGA/PS 状态 | 检查工具版本/器件、板卡状态、出厂哈希、服务和 PCM 状态 | 镜像错误、板卡状态未经核实、服务状态过期或缺少回滚路径 | Round30 部署和恢复报告 |
+| `02_dma_coherency/` | 集成 AXI DMA 加速器缓冲区 | 明确 PS/PL 地址、对齐、一致性、所有权、超时和恢复约定 | 缓存过期、缓冲区未对齐、等待无上限、寄存器/数据包约定不匹配 | `src/kernel/world_minphase_dma.c`、Round20 数值对比 |
+| `03_golden_compare/` | 对照可信软件验证 HLS/PL 输出 | 冻结输入向量，对比误差指标和调用/回退计数，每轮只改变一个变量 | 输入未冻结、变换缩放错误、回退被误报为 PL 成功，或夸大测试范围 | Round16、Round20；失败经验见 `references/round_lessons.md` |
+| `04_vivado_mcp_git_github/` | 通过 MCP 使用 Vivado 并发布可追踪的任务成果 | 核对 Vivado 版本/器件/会话，使用仓库 Tcl，检查报告，认领任务并按范围提交、推送和创建 PR | 安装/器件注册表错误、共享会话所有权不清、MCP 长命令卡住、提交不符合策略，或结论超过测试证据 | 本项目使用过相关工具、调试和协作流程；跨板卡复用尚未测量 |
+| `05_ps_pl_prompt_flow/` | 规范 AI 协助下的 PS/PL 划分、实现、验证和失败复盘 | 按阶段顺序使用提示词，将方括号字段替换为实测项目事实 | 缺少约束/证据、任务归属冲突、实体测试未确认，或将未验证结果表述为通过 | 根据本项目包及轮次记录整理；提示词本身尚未由其他团队独立试用 |
 
-The steps in these notes were exercised on the project machine and board workflow. They have not been validated by an independent team or on a second board. For another Zynq family, Linux image, tool version, or framework such as PYNQ, treat board paths, driver APIs, clocks, registers, and timing as unverified until independently checked.
+这些步骤曾在本项目的开发机和板卡流程中使用，尚未由独立团队或第二块板卡验证。迁移到其他 Zynq 系列、Linux 镜像、工具版本或 PYNQ 等框架时，在独立核实前应将板卡路径、驱动 API、时钟、寄存器和时序视为未验证。

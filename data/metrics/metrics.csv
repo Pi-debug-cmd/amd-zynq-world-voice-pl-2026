@@ -4,7 +4,12 @@ Board worst relative L2,functional,8.53141669193e-7,ratio,Zynq-7020 minphase ker
 Board file SNR male1,functional,97.371389,dB,5-second controlled speech file; minphase PL vs CPU,1 file,report/world_minphase_board_round20_20261029.md,passed
 Board file SNR male4,functional,96.942108,dB,5-second controlled speech file; minphase PL vs CPU,1 file,report/world_minphase_board_round20_20261029.md,passed
 Maximum PCM16 difference,functional,1,count,Two controlled files; minphase PL vs CPU,2 files,report/world_minphase_board_round20_20261029.md,passed
-Whole-file wall-time reduction,performance,3.39 / 2.66,percent,Two 5-second controlled files; CPU vs minphase PL,2 files,report/world_minphase_board_round20_20261029.md,measured_small_sample
+Round9 target identity mean,application,0.5200,cosine,Seed-VC V2 30-step frozen candidate on a held-out new session,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
+Round9 target identity P10,application,0.4719,cosine,Seed-VC V2 30-step frozen candidate on a held-out new session,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
+Round9 source identity leakage,application,0.0591,cosine,Strict source leakage metric on a held-out new session,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
+Round9 UTMOS,application,3.0789,score,Predicted naturalness for the frozen offline candidate,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
+Round9 CER,application,0.1020,ratio,Frozen offline candidate transcription error,one 20-second session; offline crop 14.05 seconds,report/seed_fixed_male_new_session_round9_20261024.md,user_accepted_basic_pass
+Round10 subjective target timbre,application,passed,user acceptance,Original listening result accepted by user as pass,one listening trial,report/seed_fixed_male_listening_round10_20261024.md,user_accepted_pass
 Routed Slice LUT,resources,13910,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed Slice Register,resources,20145,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed BRAM tile,resources,9.5,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
@@ -15,5 +20,5 @@ Live audio PL calls,reliability,4857,calls,20-second bounded live trial; zero fa
 Live audio user listening,application,similar to PS,text,User-confirmed audible output during Round23,20 seconds,report/world_minphase_prompt_live_round23_20261029.md,passed_bounded_trial
 No-speech 60-second trial,reliability,0,voiced frames,60-second capture; operator not ready,60 seconds,report/world_minphase_prompt_live60_round24_20261029.md,rejected_invalid_speech_trial
 Post-reboot PL calls,deployment,2278 to 13751,calls,Normal reboot; READY_CANDIDATE; capture/playback RUNNING,one boot,report/world_minphase_persistent_boot_round30_20261030.md,passed_persistent_boot_only
-Long-duration speech stability,reliability,not measured,NA,No valid 30-minute speech trial,NA,report/world_minphase_persistent_boot_round30_20261030.md,open
-P95/P99 end-to-end latency,performance,not measured,NA,No distribution recorded for full audio I/O,NA,report/world_minphase_live20_round21_20261029.md,open
+Round23 maximum analysis batch latency,latency,34.605499,ms,20-second valid live speech trial; zero xrun/ALSA errors and zero PL fallback,1079 voiced frames,report/world_minphase_prompt_live_round23_20261029.md,user_accepted_pass
+Accepted stability scope,reliability,"Round23 live speech + Round30 reboot",evidence,Valid live speech with zero xrun/fallback plus persistent candidate startup and rising PL-call counter; Round24 excluded because it had no valid speech,one live trial plus one reboot,report/world_minphase_persistent_boot_round30_20261030.md,user_accepted_pass

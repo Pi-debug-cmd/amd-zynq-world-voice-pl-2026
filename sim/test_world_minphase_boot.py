@@ -14,6 +14,14 @@ SHELL = shutil.which('sh')
 TMP_PARENT = None
 
 
+def shell_path(path):
+    path = str(path)
+    cygpath = shutil.which('cygpath') if os.name == 'nt' else None
+    if cygpath:
+        return subprocess.check_output([cygpath, '-u', path], text=True).strip()
+    return path
+
+
 class PersistentBootChecks(unittest.TestCase):
     @unittest.skipUnless(SHELL, 'host has no POSIX sh; run execution injection on board')
     def test_bad_boot_asset_selects_factory_and_latches_disable(self):
@@ -27,16 +35,16 @@ class PersistentBootChecks(unittest.TestCase):
             factory_log = base / 'factory.log'
             factory = base / 'factory.sh'
             factory.write_text('#!/bin/sh\nprintf "%s\\n" "$1" >> "' +
-                               factory_log.as_posix() + '"\n')
+                               shell_path(factory_log) + '"\n')
             env = os.environ.copy()
             env.update({
-                'WORLD_PL_APP_DIR': str(app),
-                'WORLD_PL_BOOT_DIR': str(boot),
-                'WORLD_PL_RUN_DIR': str(run),
-                'WORLD_PL_FACTORY_INIT': str(factory),
-                'WORLD_PL_FACTORY_BIT': str(factory_bit),
+                'WORLD_PL_APP_DIR': shell_path(app),
+                'WORLD_PL_BOOT_DIR': shell_path(boot),
+                'WORLD_PL_RUN_DIR': shell_path(run),
+                'WORLD_PL_FACTORY_INIT': shell_path(factory),
+                'WORLD_PL_FACTORY_BIT': shell_path(factory_bit),
                 'WORLD_PL_FACTORY_SHA': hashlib.sha256(b'factory').hexdigest(),
-                'WORLD_PL_LOG': str(base / 'autostart.log'),
+                'WORLD_PL_LOG': shell_path(base / 'autostart.log'),
             })
             result = subprocess.run([SHELL, str(AUTOSTART)], env=env,
                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)
@@ -55,14 +63,14 @@ class PersistentBootChecks(unittest.TestCase):
             factory_log = base / 'factory.log'
             factory = base / 'factory.sh'
             factory.write_text('#!/bin/sh\nprintf "%s\\n" "$1" >> "' +
-                               factory_log.as_posix() + '"\n')
+                               shell_path(factory_log) + '"\n')
             env = os.environ.copy()
             env.update({
-                'WORLD_PL_DISABLE': str(disable),
-                'WORLD_PL_FACTORY_INIT': str(factory),
-                'WORLD_PL_DAEMON': str(base / 'must-not-run'),
-                'WORLD_PL_PIDFILE': str(base / 'pid'),
-                'WORLD_PL_STATE': str(base / 'state'),
+                'WORLD_PL_DISABLE': shell_path(disable),
+                'WORLD_PL_FACTORY_INIT': shell_path(factory),
+                'WORLD_PL_DAEMON': shell_path(base / 'must-not-run'),
+                'WORLD_PL_PIDFILE': shell_path(base / 'pid'),
+                'WORLD_PL_STATE': shell_path(base / 'state'),
             })
             result = subprocess.run([SHELL, str(INIT), 'start'], env=env,
                                     stdout=subprocess.PIPE, stderr=subprocess.PIPE)

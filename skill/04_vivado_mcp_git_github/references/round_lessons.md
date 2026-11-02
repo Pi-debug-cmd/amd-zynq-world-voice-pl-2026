@@ -1,29 +1,29 @@
-# Round Lessons
+# 轮次经验
 
-These findings come from repository reports, especially `PL-20261027-01` Rounds 17-34 and the 2026-10-17 Vivado MCP setup report. Treat them as failure patterns and evidence boundaries, not guarantees that every later build has the same cause.
+以下经验来自仓库报告，重点包括 `PL-20261027-01` 的 Round17-34，以及 2026-10-17 的 Vivado MCP 配置报告。应将其视为故障模式和证据边界，而不是认定后续构建必然有相同原因。
 
-## Vivado and HLS
+## Vivado 与 HLS
 
-- **Wrong executable path:** Vivado 2026.1 was installed one directory deeper than first assumed. Verify the executable path and run `version -short` through MCP before starting a project.
-- **Empty device registry:** MCP was healthy while Vivado had no registered parts. Verify `get_parts` in the active session; repair/install the Zynq-7000 device files and restart the session before blaming Tcl or RTL.
-- **Simulation workspace:** xsim failed under the workspace file-filter driver but passed outside the workspace. Keep an external scratch simulation directory available and preserve source/testbench hashes.
-- **Long generated paths:** HLS `generate_target` failed under a long Windows path, then passed with identical sources in a short external project root. Treat path depth as a tool constraint and document the successful root.
-- **MCP long-script hangs:** Long commands through a webserver fallback were unreliable. Keep the persistent build in Tcl files, issue short diagnostic calls, and inspect the command/session logs.
-- **Transform scaling contract (Rounds 32-33):** A host hook applied `/1024` a second time after HLS IFFT had already normalized. It produced SNR near 0.1 dB and errors above 17,000 PCM16 counts; removing only that duplicate scaling yielded >104 dB and one-count errors. Write down normalization at each interface and retain a one-variable A/B regression.
+- **可执行文件路径错误：** Vivado 2026.1 的安装目录比最初假设的路径多一层。启动工程前，应核实可执行文件路径，并通过 MCP 运行 `version -short`。
+- **器件注册表为空：** MCP 工作正常，但 Vivado 未注册任何器件。在活动会话中运行 `get_parts` 检查；修复/安装 Zynq-7000 器件文件并重启会话后，再排查 Tcl 或 RTL。
+- **仿真工作区：** xsim 在工作区文件筛选驱动下失败，但移到工作区外后通过。准备外部临时仿真目录，并保留源码/测试平台哈希。
+- **生成路径过长：** HLS `generate_target` 在 Windows 长路径下失败，使用相同源码和较短外部工程根目录后通过。应把路径深度视为工具限制，并记录成功使用的根目录。
+- **MCP 长脚本卡住：** 通过 Web 服务器后备通道执行长命令不可靠。将持续使用的构建步骤写入 Tcl 文件，交互诊断使用短命令，并检查命令/会话日志。
+- **变换缩放约定（Round32-33）：** HLS IFFT 已归一化后，主机侧钩子又重复执行 `/1024`，导致 SNR 约 0.1 dB、误差超过 17,000 个 PCM16 计数。只移除重复缩放后，SNR 提高到 104 dB 以上，误差降至 1 个计数。应记录每个接口的归一化约定，并保留单变量 A/B 回归。
 
-## Integration and board evidence
+## 集成与板端证据
 
-- **OOC is not full-system signoff:** Round17 kernel OOC timing passed, but Round18 full Zynq integration still had to check PS, AXI, audio, routing, resources, and system timing. Round18 then passed its stated routed internal timing gates, while external audio I/O delays remained incomplete.
-- **Numerical correctness is not live audio:** Round20 passed 24 vectors and two real files with about 97 dB SNR and max one PCM16 count error, but did not record/play audio. Round21 had zero xrun and active PL calls but was rejected when the operator heard no sound; Round23 passed only after a fresh prompt/readiness confirmation and explicit audible feedback.
-- **No speech means no speech stability result:** Round24 ran 60 seconds without xrun but contained zero voiced frames and was rejected for the intended stability gate. Do not count silence or a process exit code as a valid speech run.
-- **Boot races require owner-specific cleanup:** Round29 candidate startup raced with `music-button` leaving a detached factory `aplay` holding the playback PCM. Round30 fixed this by stopping that service, terminating only the specifically identified test player, waiting for PCM closure, clearing stale PID/state before daemon launch, and atomically replacing state. Do not generalize this into a global `killall`.
-- **Persistent boot is a deployment result, not total acceptance:** Round30 verified a normal reboot selected `WORLD minphase PL candidate`, `READY_CANDIDATE`, active capture/playback, and increasing PL call counts. The report explicitly waived long stability and prompt audibility and limits the claim to the fused minimum-phase stage, not all of WORLD.
-- **Kernel/OOC resource wins need a measured system comparison:** A small kernel-level timing win may be hidden by DMA copies, ioctl, packing, scheduling, or audio I/O. Measure CPU and PL paths on identical inputs and binaries; report whole-pipeline wall time/RTF and overhead separately.
-- **Do not alter the live system to improve a report:** persistent installation, boot configuration, FPGA switching, audio routing, and user audio tests are separate operations. Follow the current owner/claim and readiness rules; preserve factory hashes and recovery evidence where deployment is in scope.
+- **OOC 通过不等于整机签核：** Round17 的计算核 OOC 时序通过后，Round18 整机 Zynq 集成仍需检查 PS、AXI、音频、布线、资源和系统时序。Round18 随后通过了报告中列出的内部布线时序门槛，但外部音频 I/O 延迟约束仍不完整。
+- **数值正确不等于实时音频通过：** Round20 的 24 组向量和两个真实文件对比通过，SNR 约 97 dB，最大误差为 1 个 PCM16 计数，但未进行录放音。Round21 虽然没有 xrun 且 PL 有调用，但操作者未听到声音，因此被否决；Round23 在重新确认提示音和操作者准备情况，并获得明确的可听反馈后才通过。
+- **没有有效语音就不能得出语音稳定性结论：** Round24 运行 60 秒且没有 xrun，但有效浊音帧为零，因此不符合预期稳定性门槛并被否决。不能把静音或进程退出码当作有效语音测试。
+- **启动竞争需要按所有者精确清理：** Round29 候选程序启动时，与 `music-button` 启动并遗留的分离式厂商 `aplay` 竞争播放 PCM。Round30 通过停止该服务、只终止明确识别的测试播放器、等待 PCM 关闭、启动守护进程前清除过期 PID/状态，并原子替换状态文件解决问题。不得将该做法泛化为全局 `killall`。
+- **持久启动是部署结果，不代表所有验收项通过：** Round30 验证正常重启后选择了 `WORLD minphase PL candidate`，状态为 `READY_CANDIDATE`，采集/播放均活动，PL 调用计数递增。报告明确免除了长时稳定性和提示音可听性要求，并将结论限定为融合最小相位阶段，而非整个 WORLD 流程。
+- **核级/OOC 资源优势需要整机实测对比：** 核级的小幅时序优势可能被 DMA 复制、ioctl、打包、调度或音频输入输出开销抵消。应在相同输入和二进制下测量 CPU 与 PL 路径，并分别报告整条流程耗时/RTF 及各项开销。
+- **不得为改善报告而改动现场系统：** 持久化安装、启动配置、FPGA 切换、音频路由和用户音频测试属于不同操作。按当前任务负责人/认领和准备确认规则执行；涉及部署时保留出厂哈希和恢复证据。
 
-## Round discipline
+## 轮次管理
 
-- Change one material variable per round and freeze input hashes, binary/model hashes, tool versions, constraints, and the acceptance threshold.
-- Keep rejection evidence. A failed round should identify the trigger, measured failure, root cause if established, and the single next change; do not bury it under a later pass.
-- Separate proof levels in both JSON and prose: host model/C-sim, RTL cosim, OOC route, full-design route, board numerical comparison, live I/O, user listening, and stability.
-- Preserve contradictory observations. A later pass may supersede a state, but does not erase the earlier log or make a previous failure false.
+- 每轮只改变一个实质变量，并冻结输入哈希、二进制/模型哈希、工具版本、约束和验收门槛。
+- 保留否决证据。失败轮次应说明触发条件、测量到的失败、已确认的根因和唯一的下一项改动；不能用后续通过记录掩盖失败。
+- 在 JSON 和正文中分别标明证据等级：主机模型/C 仿真、RTL 协同仿真、OOC 布线、整机布线、板端数值对比、实时输入输出、用户试听和稳定性。
+- 保留相互矛盾的观察结果。后续通过可以更新当前状态，但不能删除先前日志或否认历史失败。

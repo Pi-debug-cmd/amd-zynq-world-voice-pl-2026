@@ -1,26 +1,26 @@
-# Stage 2: HLS/RTL Implementation
+# 阶段 2：HLS/RTL 实现
 
-Use after the interface and acceptance contract have been reviewed and frozen.
+接口和验收约定经审查并冻结后使用。
 
 ```text
-Implement only the accepted PS/PL boundary below.
+只实现下列已接受的 PS/PL 划分边界。
 
-Target: [exact AMD part]
-Tool version: [Vivado/Vitis]
-Source revision and owned paths: [SHA and file list]
-Interface contract: [frozen types, sizes, units, scaling, register/DMA map]
-Reference function: [trusted software implementation and version]
-Acceptance: [numeric tolerance, resource/timing limits, timeout behavior]
-Existing scripts/tests: [paths]
+目标器件：[准确的 AMD 器件型号]
+工具版本：[Vivado/Vitis]
+源码版本和任务负责路径：[SHA 和文件清单]
+接口约定：[冻结的类型、大小、单位、缩放、寄存器/DMA 映射]
+参考函数：[可信的软件实现及版本]
+验收标准：[数值容差、资源/时序限制、超时行为]
+已有脚本/测试：[路径]
 
-First inspect the relevant code and report dependencies or contradictions. Then make the smallest implementation change. Preserve PS fallback behavior only if the frozen contract calls for it. Add or update a deterministic testbench using fixed or reproducibly generated vectors. Do not include generated build products, bitstreams, models, or human audio in source control unless the project explicitly requires them.
+先检查相关代码，并报告依赖或矛盾之处。然后进行最小幅度的实现修改。只有冻结的接口约定要求时，才保留 PS 回退行为。使用固定或可重复生成的向量新增或更新确定性测试平台。除非项目明确要求，不要将生成的构建产物、位流、模型或人声加入版本控制。
 
-Return:
-- changed paths and why each is necessary;
-- build/simulation commands and exact expected outputs;
-- interface and scaling assumptions that need confirmation;
-- tests not run and why;
-- evidence needed before calling this a board pass.
+请返回以下内容：
+- 修改的路径，以及每项修改的必要性；
+- 构建/仿真命令和准确的预期输出；
+- 需要确认的接口和缩放假设；
+- 未运行的测试及原因；
+- 将其判定为板端通过前还需要哪些证据。
 ```
 
-For an existing design, ask the model to inspect the source and build scripts before it edits. In this project, the WORLD 0.3.5 tree and generated full audio project were external inputs, so the checked-in Tcl alone was not a clean-room full-system build.
+对于已有设计，应要求模型先检查源码和构建脚本，再进行修改。本项目的 WORLD 0.3.5 源码树和生成的完整音频工程是外部输入，因此仅凭仓库中的 Tcl 脚本不能在干净环境中重建整机。

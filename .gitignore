@@ -6,9 +6,12 @@ build/generated/
 *.dcp
 *.bit
 *.bin
+*.bin.gz
 *.ltx
 *.wdb
 *.xsa
+board/hardware/round30/voice7020_project_sources.zip
+board/hardware/round30/voice7020_project_sources.tar.gz
 *.hwh
 *.elf
 *.o

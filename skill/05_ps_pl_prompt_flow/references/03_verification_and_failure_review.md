@@ -1,54 +1,54 @@
-# Stage 3: Verification and Failure Review
+# 阶段 3：验证与失败复盘
 
-Use one prompt per verification level. Do not combine evidence from different levels into one acceptance claim.
+每个验证等级分别使用对应提示词。不得将不同等级的证据合并成一个验收结论。
 
-## Regression prompt
-
-```text
-Review this test result against the frozen contract.
-
-Source SHA: [full SHA]
-Test level: [host / HLS C simulation / RTL co-simulation / OOC / routed system / board numeric / live I/O / listening / stability]
-Tool/board: [versions and exact part]
-Input identity: [vector/audio identifiers and hashes; do not attach controlled media unless required]
-Reference and candidate builds: [exact commands and hashes]
-Acceptance threshold: [numeric rule]
-Observed result: [raw values and evidence paths]
-
-Determine pass, reject, blocked, or invalid trial. Check normalization/scaling, input identity, fallback counters, timeouts, output energy, and test duration where applicable. Identify whether the failure is in the design, tool setup, test harness, input preparation, or evidence. Propose one next change only. Do not infer audible output from nonzero samples or stability from a no-speech run.
-```
-
-## Physical test prompt
+## 回归测试提示词
 
 ```text
-Prepare a bounded physical test plan only; do not start capture or playback.
+请依据已冻结的接口约定审查以下测试结果。
 
-Operator readiness for this exact run: [confirmed / not confirmed]
-Board and recovery baseline: [exact IDs and hashes]
-Candidate files/hashes: [exact list]
-Test purpose and stop condition: [one question]
-Input/output setup: [microphone/speaker, sample format, duration]
-Expected result and rollback: [specific]
+源码 SHA：[完整 SHA]
+测试等级：[主机 / HLS C 仿真 / RTL 协同仿真 / OOC / 整机布线 / 板端数值 / 实时输入输出 / 试听 / 稳定性]
+工具/板卡：[版本和准确器件型号]
+输入标识：[向量/音频标识和哈希；除非必要，不附带受控素材]
+参考和候选构建：[准确命令和哈希]
+验收门槛：[数值规则]
+观察结果：[原始数值和证据路径]
 
-Check that the proposed run does not overlap another owner, alter unverified boot assets, or skip required recovery. If readiness is not confirmed, stop at the plan. List the exact observations to save and post-test restoration checks.
+请判定通过、否决、阻塞或测试无效。在适用情况下检查归一化/缩放、输入标识、回退计数、超时、输出能量和测试时长。判断失败来自设计、工具配置、测试平台、输入准备还是证据。只提出一项下一步修改。不得根据非零采样推断已听到声音，也不得根据没有语音的测试推断语音稳定性。
 ```
 
-## Round report prompt
+## 实体测试提示词
 
 ```text
-Write a concise report for this single implementation or test round.
+只准备范围明确的实体测试方案；不要开始录音或播放。
 
-Task ID/date/role: [values]
-Baseline and resulting source SHA: [full hashes]
-Changed paths/commands: [exact]
-Environment/input identity: [versions, formats, hashes]
-Raw evidence: [paths and hashes]
-Measured result: [values and count/duration]
-Decision: [PROPOSED / ACCEPTED / REJECTED / BLOCKED]
-Known limits: [claims not established]
-Next owner/action: [one]
+操作者是否已为本次测试准备就绪：[已确认 / 未确认]
+板卡和恢复基线：[准确标识和哈希]
+候选文件/哈希：[准确清单]
+测试目的和停止条件：[一个问题]
+输入/输出配置：[麦克风/扬声器、采样格式、时长]
+预期结果和回滚方案：[具体说明]
 
-Preserve prior failures and verbatim user listening feedback. State the exact proof level. Do not call a round complete if its stated exit gate is still open.
+检查本次测试是否与其他负责人的任务重叠、是否会修改未经验证的启动制品，或跳过必要的恢复步骤。如果操作者未确认准备就绪，则只保留测试方案，不要执行。列出需要保存的准确观察结果和测试后恢复检查。
 ```
 
-These prompts capture recurring lessons from the project: a Round21 live run had zero digital underruns but was rejected when no sound was heard; Round24's 60-second run had zero voiced frames and was invalid as speech stability evidence; Round30 proved persistent boot and active PL calls but did not prove long-duration speech stability.
+## 轮次报告提示词
+
+```text
+请为本次单独的实现或测试轮次编写简明报告。
+
+任务编号/日期/角色：[填写]
+基线和修改后源码 SHA：[完整哈希]
+修改路径/命令：[准确记录]
+环境/输入标识：[版本、格式、哈希]
+原始证据：[路径和哈希]
+测量结果：[数值及次数/时长]
+决定：[PROPOSED / ACCEPTED / REJECTED / BLOCKED]
+已知限制：[尚未证实的结论]
+下一责任方/行动：[一项]
+
+保留先前失败记录和用户试听反馈原文。注明准确的证据等级。既定退出门槛仍未关闭时，不得宣称该轮已完成。
+```
+
+这些提示词总结了项目中反复出现的经验：Round21 实时运行虽没有数字欠载，但因未听到声音而被否决；Round24 的 60 秒运行没有有效浊音帧，不能作为语音稳定性证据；Round30 证明了持久启动和 PL 调用活动，但没有证明长时语音稳定性。

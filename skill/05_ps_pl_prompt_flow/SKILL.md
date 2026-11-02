@@ -1,26 +1,26 @@
 ---
 name: ps-pl-prompt-flow
-description: Structure AI-assisted PS/PL work on AMD Zynq projects from requirements and partitioning through HLS/RTL implementation, verification, board testing, and evidence-based review.
+description: 规范 AMD Zynq 项目中由 AI 协助开展的 PS/PL 工作，覆盖需求与划分、HLS/RTL 实现、验证、板端测试和基于证据的审查。
 ---
 
-# PS+PL Prompt Flow
+# PS+PL 提示词流程
 
-Use this prompt sequence when a Zynq project needs a traceable PS/PL implementation or a controlled iteration on an existing accelerator. The sequence is technology-aware but not tied to speech processing.
+当 Zynq 项目需要可追踪的 PS/PL 实现，或需要对现有加速器开展受控迭代时，使用此提示词流程。流程考虑了相关技术，但不限定于语音处理。
 
-Read only the template needed for the current stage:
+只阅读当前阶段所需的模板：
 
-- [Requirements and partitioning](references/01_requirements_and_partitioning.md)
-- [HLS/RTL implementation](references/02_implementation.md)
-- [Verification and failure review](references/03_verification_and_failure_review.md)
+- [需求分析与软硬件划分](references/01_requirements_and_partitioning.md)
+- [HLS/RTL 实现](references/02_implementation.md)
+- [验证与失败复盘](references/03_verification_and_failure_review.md)
 
-## Operating rules
+## 使用规则
 
-- Replace bracketed fields with measured facts. If a field is unknown, label it unknown and state how it can be measured; do not invent a value.
-- Keep the requested task scope and acceptance gate explicit. Do not advance from algorithm selection to PL implementation if an earlier quality or functional gate is still open.
-- Ask for the smallest useful artifact set: interface contract, current source revision, target part/tool version, baseline test, and relevant logs.
-- Change one main variable per experiment. Preserve rejected results and the exact cause or unresolved uncertainty.
-- Separate host reference, HLS C simulation, RTL co-simulation, OOC implementation, routed system, board numeric test, live I/O, listening, and stability claims.
-- For any physical test that records, plays, or requires an operator, stop before starting until the operator confirms readiness for that specific run.
-- Finish with a report containing exact source revision, commands, environment, inputs/hashes, raw evidence, outcome, limits, and next owner.
+- 将方括号字段替换为已测事实。如果字段未知，应明确标记未知并说明测量方法；不得编造数值。
+- 明确任务范围和验收门槛。此前的质量或功能门槛尚未通过时，不要从算法选择直接进入 PL 实现。
+- 只索取当前阶段所需的最小材料集：接口约定、当前源码版本、目标器件/工具版本、基线测试和相关日志。
+- 每次实验只改变一个主要变量。保留被否决的结果，以及准确原因或尚未解决的不确定性。
+- 区分主机参考、HLS C 仿真、RTL 协同仿真、OOC 实现、整机布线、板端数值测试、实时输入输出、试听和稳定性结论。
+- 任何需要录音、播放或操作者参与的实体测试，都必须先暂停，直到操作者确认已为该次测试做好准备。
+- 最后形成报告，记录准确源码版本、命令、环境、输入/哈希、原始证据、结果、限制和下一责任方。
 
-The prompt templates are a starting point, not proof that the implementation passes. This prompt set is newly assembled from project experience and has not yet been independently forward-tested.
+提示词模板只是工作起点，不能证明实现已经通过。本提示词集依据项目经验整理，尚未由其他团队独立试用验证。
