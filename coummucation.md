@@ -34,3 +34,15 @@
 - 结果：2 页 A4；PDF 179,075 字节；中文文本可提取；两页均已渲染检查，表格列宽、跨页表头、页眉和页码正常。
 - 限制：当前构建环境使用 Windows DengXian 字体；字体文件由操作系统提供，不随本项目分发。
 - 下一责任方：仓库维护者审查并合并 PR。
+
+## SUBMIT-20261101-02 - 2026-11-03 - 设计报告按官方内容项修订
+
+- 状态：PROPOSED
+- 角色：Codex
+- 基准提交：`28ef8df`
+- 改动：扩充中文版设计报告，使 AMD 指南设计报告要求对应章节、工程数据和复现限制；修复 PDF 框图 Flowable 尺寸、按表列数分配正文宽度，并渲染 Markdown 有序/无序列表。
+- 路径：`build/render_design_report_pdf.py`、`output/pdf/design_report_cn.pdf`、`report/DESIGN_REPORT.md`、`report/SUBMISSION_CHECKLIST.md`、`coummucation.md`。
+- 复现/检查：使用 `tmp/pdfs/.venv/Scripts/python.exe build/render_design_report_pdf.py --font-regular C:/Windows/Fonts/Deng.ttf --font-bold C:/Windows/Fonts/Dengb.ttf --github-branch agent/Pi-debug-cmd/SUBMIT-20261101-02` 生成 PDF；`pdfinfo` 确认 7 页 A4；PyMuPDF 确认复现第 1/6 步和自评章节可提取，正文文字坐标在页边界内；Poppler 逐页渲染检查框图、表格、页眉和页码；`git diff --check`。
+- 结果：PDF 正文包含官方要求的背景/创新、功能框图、原理与接口、资源/性能对照、AI 协作记录、Skill 提炼与验证、复现说明。报告明示现有项目材料不能从空机器重建完整板端运行环境，不声称端到端从零复现已经满足。
+- 限制：PetaLinux 2022.2 工程/BSP、可启动镜像、驱动模块和 WORLD 运行时文件仍未提供；Vivado 完整源码包未在干净环境重新完成全流程布线。此轮仅验证 PDF 文档，不重新进行板卡测试。
+- 下一责任方：Codex 更新并推送当前 PR；维护者审核。

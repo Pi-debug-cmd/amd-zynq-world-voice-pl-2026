@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 from html import escape
+import math
 from pathlib import Path
 import posixpath
 from urllib.parse import quote
@@ -17,13 +18,95 @@ from reportlab.lib.styles import ParagraphStyle
 from reportlab.lib.units import mm
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfbase.ttfonts import TTFont
-from reportlab.platypus import Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
+from reportlab.platypus import Flowable, Paragraph, SimpleDocTemplate, Spacer, Table, TableStyle
 
 
 INK = colors.HexColor("#20272A")
 BLUE = colors.HexColor("#173B45")
 RULE = colors.HexColor("#AAC0C4")
 HEADER_FILL = colors.HexColor("#E9F0F1")
+
+
+class ArchitectureDiagram(Flowable):
+    """Draw the report's PS/PL data path from its Mermaid architecture block."""
+
+    def __init__(self):
+        super().__init__()
+        self.width = 174 * mm
+        self.height = 57 * mm
+
+    def _box(self, c, x, y, w, h, label, fill, font_size=7.1):
+        c.setFillColor(fill)
+        c.setStrokeColor(colors.HexColor("#66858C"))
+        c.roundRect(x, y, w, h, 4, fill=1, stroke=1)
+        c.setFillColor(BLUE)
+        c.setFont("Deng-Bold", font_size)
+        lines = label.split("\n")
+        line_h = font_size + 2
+        start_y = y + (h + (len(lines) - 1) * line_h) / 2 - font_size * 0.35
+        for i, line in enumerate(lines):
+            c.drawCentredString(x + w / 2, start_y - i * line_h, line)
+
+    def _arrow(self, c, x1, y1, x2, y2, label=None):
+        c.setStrokeColor(colors.HexColor("#52727A"))
+        c.setFillColor(colors.HexColor("#52727A"))
+        c.setLineWidth(1)
+        c.line(x1, y1, x2, y2)
+        angle = math.atan2(y2 - y1, x2 - x1)
+        size = 4
+        points = [
+            (x2, y2),
+            (x2 - size * math.cos(angle - 0.45), y2 - size * math.sin(angle - 0.45)),
+            (x2 - size * math.cos(angle + 0.45), y2 - size * math.sin(angle + 0.45)),
+        ]
+        p = c.beginPath()
+        p.moveTo(*points[0])
+        p.lineTo(*points[1])
+        p.lineTo(*points[2])
+        p.close()
+        c.drawPath(p, fill=1, stroke=0)
+        if label:
+            c.setFont("Deng", 6.3)
+            c.setFillColor(colors.HexColor("#52676D"))
+            c.drawCentredString((x1 + x2) / 2, (y1 + y2) / 2 + 4, label)
+
+    def draw(self):
+        c = self.canv
+        input_fill = colors.HexColor("#EEF3F4")
+        ps_fill = colors.HexColor("#E5F0EB")
+        pl_fill = colors.HexColor("#E8EEF7")
+        x = [4, 127, 250, 374]
+        w = 105
+        top_y = 119
+        h = 31
+        self._box(c, x[0], top_y, w, h, "麦克风 / WM8960", input_fill)
+        self._box(c, x[1], top_y, w, h, "PS ALSA 采集", ps_fill)
+        self._box(c, x[2], top_y, w, h, "WORLD 分析 (PS)", ps_fill)
+        self._box(c, x[3], top_y, w, h, "最小相位接口 (PS)", ps_fill)
+        self._arrow(c, x[0] + w, top_y + h / 2, x[1], top_y + h / 2)
+        self._arrow(c, x[1] + w, top_y + h / 2, x[2], top_y + h / 2)
+        self._arrow(c, x[2] + w, top_y + h / 2, x[3], top_y + h / 2)
+
+        mid_y = 63
+        self._box(c, 72, mid_y, 87, 30, "CPU 参考/回退", input_fill, 6.7)
+        self._box(c, 193, mid_y, 105, 30, "Linux DMA 驱动", ps_fill, 6.7)
+        self._box(c, 325, mid_y, 79, 30, "AXI HP2 / DDR", input_fill, 6.7)
+        self._box(c, 423, mid_y, 70, 30, "HLS 核 (PL)", pl_fill, 6.5)
+        self._arrow(c, 400, top_y, 251, mid_y + 30, "PL 调用")
+        self._arrow(c, 383, top_y, 159, mid_y + 20, "CPU 模式")
+        self._arrow(c, 298, mid_y + 15, 325, mid_y + 15)
+        self._arrow(c, 404, mid_y + 15, 423, mid_y + 15)
+        self._arrow(c, 423, mid_y + 7, 404, mid_y + 7)
+        self._arrow(c, 423, mid_y + 23, 404, mid_y + 23)
+
+        bot_y = 8
+        self._box(c, 190, bot_y, 105, 30, "WORLD 合成 (PS)", ps_fill, 6.7)
+        self._box(c, 324, bot_y, 79, 30, "PS ALSA 播放", ps_fill, 6.7)
+        self._box(c, 423, bot_y, 70, 30, "WM8960 输出", input_fill, 6.5)
+        self._arrow(c, 458, mid_y, 295, bot_y + 30, "计算结果")
+        self._arrow(c, 295, bot_y + 15, 324, bot_y + 15)
+        self._arrow(c, 403, bot_y + 15, 423, bot_y + 15)
+        self._arrow(c, 114, mid_y, 190, bot_y + 25, "CPU 结果")
 
 
 def make_styles():
@@ -40,6 +123,12 @@ def make_styles():
             "Body", fontName="Deng", fontSize=9.6, leading=15.2,
             textColor=INK, alignment=TA_JUSTIFY, spaceAfter=6,
             wordWrap="CJK", splitLongWords=1,
+        ),
+        "list": ParagraphStyle(
+            "List", fontName="Deng", fontSize=9.4, leading=14.4,
+            textColor=INK, alignment=TA_JUSTIFY, leftIndent=15, firstLineIndent=0,
+            bulletIndent=0, bulletFontName="Deng", bulletFontSize=8.8,
+            spaceAfter=5, wordWrap="CJK", splitLongWords=1,
         ),
         "cell": ParagraphStyle(
             "Cell", fontName="Deng", fontSize=7.7, leading=11.1,
@@ -94,6 +183,18 @@ def render_inline(nodes, branch: str) -> str:
     return "".join(output)
 
 
+def table_column_widths(column_count: int) -> list[float]:
+    weights = {
+        2: [1.0, 2.2],
+        3: [1.0, 1.0, 2.2],
+        4: [1.0, 1.1, 1.2, 1.7],
+        5: [1.0, 1.0, 1.1, 1.4, 1.5],
+    }.get(column_count, [1.0] * column_count)
+    total_weight = sum(weights)
+    available_width = 174 * mm
+    return [available_width * weight / total_weight for weight in weights]
+
+
 def make_story(source: Path, styles, branch: str):
     tokens = mistune.create_markdown(renderer="ast", plugins=["table"])(
         source.read_text(encoding="utf-8")
@@ -113,6 +214,23 @@ def make_story(source: Path, styles, branch: str):
                 story.extend([rule, Spacer(1, 5)])
         elif kind == "paragraph":
             story.append(Paragraph(render_inline(children, branch), styles["body"]))
+        elif kind == "list":
+            ordered = token.get("attrs", {}).get("ordered", False)
+            for index, item in enumerate(children, start=1):
+                item_nodes = item.get("children", [])
+                text_nodes = []
+                for child in item_nodes:
+                    if child.get("type") in ("block_text", "paragraph"):
+                        text_nodes.extend(child.get("children", []))
+                bullet = f"{index}." if ordered else "-"
+                story.append(
+                    Paragraph(
+                        render_inline(text_nodes, branch), styles["list"],
+                        bulletText=bullet,
+                    )
+                )
+        elif kind == "block_code" and token.get("attrs", {}).get("info") == "mermaid":
+            story.append(ArchitectureDiagram())
         elif kind == "table":
             head = next((row for row in children if row.get("type") == "table_head"), None)
             body = next((row for row in children if row.get("type") == "table_body"), None)
@@ -129,7 +247,7 @@ def make_story(source: Path, styles, branch: str):
                         for cell in row.get("children", [])
                     ])
             table = Table(
-                rows, colWidths=[35 * mm, 34 * mm, 105 * mm],
+                rows, colWidths=table_column_widths(len(rows[0])),
                 repeatRows=1, hAlign="LEFT", splitByRow=1,
             )
             table.setStyle(TableStyle([
