@@ -1,10 +1,8 @@
 # Audio wiring adapted from reviewed handoff; PS and pins audited against A disk.
 set root [file normalize [file join [file dirname [info script]] ..]]
-if {[llength $argv] > 1 || ([llength $argv] && [lindex $argv 0] ni {fft minphase})} {error "Expected no argument, fft, or minphase"}
-set mode [expr {[llength $argv] ? [lindex $argv 0] : "exp"}]
-set with_fft [expr {$mode eq "fft"}]
-set with_minphase [expr {$mode eq "minphase"}]
-set tag [expr {$with_fft ? "world_fft_20261027" : ($with_minphase ? "world_minphase_20261029" : "world_exp_20261027")}]
+if {[llength $argv] > 1 || ([llength $argv] && [lindex $argv 0] ne "minphase")} {error "This package builds only the Round30 minphase design"}
+set with_minphase 1
+set tag world_minphase_20261029
 set out [file join $root build generated $tag]
 if {$with_minphase && [info exists ::env(WORLD_MINPHASE_PROJECT)]} {
   set out [file normalize $::env(WORLD_MINPHASE_PROJECT)]
@@ -26,7 +24,7 @@ create_bd_design zynq
 set ps [create_bd_cell -type ip -vlnv xilinx.com:ip:processing_system7:5.5 ps7]
 source [file join $root board vendor_inputs ps7_config.tcl]
 set_property -dict $ps_cfg $ps
-set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 [expr {$with_fft || $with_minphase}] CONFIG.PCW_USE_S_AXI_HP3 {0}] $ps
+set_property -dict [list CONFIG.PCW_USE_S_AXI_HP2 {1} CONFIG.PCW_USE_S_AXI_HP3 {0}] $ps
 apply_bd_automation -rule xilinx.com:bd_rule:processing_system7 -config {make_wrapper {0}} $ps
 
 # ---------------- audio components ----------------
@@ -51,7 +49,7 @@ set dma [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_dma:7.1 pitch_dma]
 set_property -dict [list CONFIG.c_include_sg {0} CONFIG.c_m_axis_mm2s_tdata_width {64} CONFIG.c_s_axis_s2mm_tdata_width {64} CONFIG.c_sg_length_width {23}] $dma
 create_bd_cell -type module -reference axis_world_exp pitch
 set cic [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 ctrl_ic]
-set_property -dict [list CONFIG.NUM_SI {1} CONFIG.NUM_MI [expr {$with_minphase ? 8 : ($with_fft ? 7 : 6)}]] $cic
+set_property -dict [list CONFIG.NUM_SI {1} CONFIG.NUM_MI {8}] $cic
 set pic [create_bd_cell -type ip -vlnv xilinx.com:ip:axi_interconnect:2.1 pitch_dma_mem]
 set_property -dict [list CONFIG.NUM_SI {2} CONFIG.NUM_MI {1}] $pic
 
@@ -204,8 +202,7 @@ assign_bd_address -offset 0x00000000 -range 0x40000000 -target_address_space [ge
 foreach master {M_AXI_MM2S M_AXI_S2MM} {
   assign_bd_address -offset 0x00000000 -range 0x40000000 -target_address_space [get_bd_addr_spaces pitch_dma/$master] [get_bd_addr_segs ps7/S_AXI_HP1/HP1_DDR_LOWOCM]
 }
-if {$with_fft} {source [file join $root build add_world_fft.tcl]}
-if {$with_minphase} {source [file join $root build add_world_minphase.tcl]}
+source [file join $root build add_world_minphase.tcl]
 save_bd_design
 validate_bd_design
 save_bd_design

@@ -1,0 +1,40 @@
+{
+  "submission": "WORLD Zynq-7020 PS+PL Round30",
+  "track": "2026 AMD autonomous topic, beginner group",
+  "source_repository": "https://github.com/Pi-debug-cmd/2026_FPGA",
+  "source_branch": "agent/Pi-debug-cmd/PL-20261027-01",
+  "source_commit": "a8f6f8f32b159eaea277354118220c633f31fbc2",
+  "device": "xc7z020clg400-2",
+  "runtime": "Wildfire PetaLinux 2022.2",
+  "toolchain": "Vivado/Vitis HLS 2026.1",
+  "included_key_artifacts": [
+    {
+      "path": "board/vendor_project/wildfire_zynq7020_audio_base.zip",
+      "sha256": "8b74e66b27863a9f6e9a87e42b4ea4e4591848f0fadd775d2462bdfd8c0fa506",
+      "scope": "Unmodified Wildfire vendor audio Vivado project input; its embedded XSA is not the Round30 export."
+    },
+    {
+      "path": "report/world_minphase_persistent_boot_round30_20261030.json",
+      "sha256": "5881d96bc56946c0a4958d58e1afe1600f22c9d32a1bd5f432bddbb582793699",
+      "scope": "Round30 board persistent boot and runtime evidence."
+    },
+    {
+      "path": "report/design_report.pdf",
+      "sha256": "7e97669e8fcd082105c2b0c906d0c64691b33fb5dd6f13890499e03de545acf4",
+      "scope": "Final Chinese competition design report."
+    },
+    {
+      "path": "report/design_report.docx",
+      "sha256": "55ad7d2f0253bceecb61cf46d5619ef0bf009a01ffcfa94f61cee09afc308376",
+      "scope": "Editable source for the final design report."
+    }
+  ],
+  "peta_linux_download": "https://www.amd.com/zh-cn/products/software/adaptive-socs-and-fpgas/embedded-software/petalinux-sdk.html",
+  "not_included": [
+    "Round30-generated bitstream or XSA",
+    "PetaLinux image or complete PetaLinux build tree",
+    "Raw human speech recordings"
+  ],
+  "reproduction_entry": "docs/reproduction.md",
+  "report_and_evidence_entry": "report/DESIGN_REPORT.md"
+}
