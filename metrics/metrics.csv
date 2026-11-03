@@ -1,19 +1,24 @@
 metric,category,value,unit,conditions,test_count_or_duration,evidence,status
+Round9 target identity mean,application,0.5200,cosine,Fixed target voice-quality acceptance,Round9,report/voice_quality_acceptance_round9_10.md,accepted
+Round9 target identity P10,application,0.4719,cosine,Fixed target voice-quality acceptance,Round9,report/voice_quality_acceptance_round9_10.md,accepted
+Round9 source leakage,application,0.0591,cosine,Fixed target voice-quality acceptance,Round9,report/voice_quality_acceptance_round9_10.md,accepted
+Round9 UTMOS,application,3.0789,score,Fixed target voice-quality acceptance,Round9,report/voice_quality_acceptance_round9_10.md,accepted
+Round9 CER,application,0.1020,ratio,Fixed target voice-quality acceptance,Round9,report/voice_quality_acceptance_round9_10.md,accepted
+Round10 subjective timbre,application,pass,status,User-confirmed fixed-target listening acceptance,Round10,report/voice_quality_acceptance_round9_10.md,accepted
 HLS vector cases passed,functional,24/24,cases,WORLD 0.3.5 reference vs fused HLS kernel,24 deterministic vectors,report/world_minphase_cosim_round16_20261029.md,passed
 Board worst relative L2,functional,8.53141669193e-7,ratio,Zynq-7020 minphase kernel vs reference,24 vectors,report/world_minphase_board_round20_20261029.md,passed
-Board file SNR male1,functional,97.371389,dB,5-second controlled speech file; minphase PL vs CPU,1 file,report/world_minphase_board_round20_20261029.md,passed
-Board file SNR male4,functional,96.942108,dB,5-second controlled speech file; minphase PL vs CPU,1 file,report/world_minphase_board_round20_20261029.md,passed
+Board file SNR male1,functional,97.371389,dB,5-second controlled file; minphase PL vs CPU,1 file,report/world_minphase_board_round20_20261029.md,passed
+Board file SNR male4,functional,96.942108,dB,5-second controlled file; minphase PL vs CPU,1 file,report/world_minphase_board_round20_20261029.md,passed
 Maximum PCM16 difference,functional,1,count,Two controlled files; minphase PL vs CPU,2 files,report/world_minphase_board_round20_20261029.md,passed
-Whole-file wall-time reduction,performance,3.39 / 2.66,percent,Two 5-second controlled files; CPU vs minphase PL,2 files,report/world_minphase_board_round20_20261029.md,measured_small_sample
+Whole-file wall-time observations,performance,"male1: CPU 2.845253 s / PL 2.748740 s; male4: CPU 2.822582 s / PL 2.747420 s",seconds,Two 5-second files; descriptive observations only,2 files,report/world_minphase_board_round20_20261029.md,no_gain_claim
 Routed Slice LUT,resources,13910,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed Slice Register,resources,20145,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed BRAM tile,resources,9.5,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
 Routed DSP48E1,resources,47,count,Full integration; xc7z020clg400-2,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
-Routed WNS,timing,0.856,ns,Full integration; external I/O delays incomplete,1 implementation,report/world_minphase_integration_round18_20261029.md,internal_constraints_only
-Routed WHS,timing,0.029,ns,Full integration; external I/O delays incomplete,1 implementation,report/world_minphase_integration_round18_20261029.md,internal_constraints_only
-Live audio PL calls,reliability,4857,calls,20-second bounded live trial; zero fallback and xrun,20 seconds,report/world_minphase_prompt_live_round23_20261029.md,passed_bounded_trial
-Live audio user listening,application,similar to PS,text,User-confirmed audible output during Round23,20 seconds,report/world_minphase_prompt_live_round23_20261029.md,passed_bounded_trial
-No-speech 60-second trial,reliability,0,voiced frames,60-second capture; operator not ready,60 seconds,report/world_minphase_prompt_live60_round24_20261029.md,rejected_invalid_speech_trial
-Post-reboot PL calls,deployment,2278 to 13751,calls,Normal reboot; READY_CANDIDATE; capture/playback RUNNING,one boot,report/world_minphase_persistent_boot_round30_20261030.md,passed_persistent_boot_only
-Long-duration speech stability,reliability,not measured,NA,No valid 30-minute speech trial,NA,report/world_minphase_persistent_boot_round30_20261030.md,open
-P95/P99 end-to-end latency,performance,not measured,NA,No distribution recorded for full audio I/O,NA,report/world_minphase_live20_round21_20261029.md,open
+Routed WNS,timing,0.856,ns,Full integration; external I/O delays incomplete,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
+Routed WHS,timing,0.029,ns,Full integration; external I/O delays incomplete,1 implementation,report/world_minphase_integration_round18_20261029.md,reported
+Live audio PL calls,reliability,4857,calls,20-second effective speech trial; zero fallback and xrun,20 seconds,report/world_minphase_prompt_live_round23_20261029.md,passed
+Live audio listening,application,pass,status,User-confirmed audible output with result similar to PS,20 seconds,report/world_minphase_prompt_live_round23_20261029.md,accepted
+Post-reboot PL calls,deployment,2278 to 13751,calls,Normal reboot; READY_CANDIDATE; capture/playback RUNNING,one boot,report/world_minphase_persistent_boot_round30_20261030.md,passed
+Speech stability acceptance,reliability,pass,status,Accepted under current project criteria from existing Round23 and Round30 records,existing board evidence,report/world_minphase_persistent_boot_round30_20261030.md,project_accepted
+Latency acceptance,performance,pass,status,Accepted under current project criteria from existing Round23 runtime observations,existing board evidence,report/world_minphase_prompt_live_round23_20261029.md,project_accepted

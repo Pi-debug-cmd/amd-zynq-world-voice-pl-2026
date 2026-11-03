@@ -9,6 +9,8 @@
 - Audio codec: WM8960; the tested physical chain used the external microphone input and speaker/headphone output described in the source project's hardware notes.
 - Recorded ALSA transport: 32 kHz, S24_LE, two channels; the WORLD algorithm's internal stream is mono 16 kHz.
 
+The vendor audio baseline is included as the unmodified archive `board/vendor_project/wildfire_zynq7020_audio_base.zip`. Its source path, SHA-256, archive inspection, and license notes are in `board/vendor_project/MANIFEST.md`. The Round30 HLS/PS/driver changes are provided as source and Tcl in this repository; generated integration outputs are created in the local build directory.
+
 This is not a PYNQ-Z2 board image or a PYNQ overlay package. It is a Linux/PetaLinux deployment using a custom bitstream, an out-of-tree kernel module, a C++ runtime, and init scripts.
 
 ## Safe reproduction boundary

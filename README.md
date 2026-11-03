@@ -1,54 +1,61 @@
-# WORLD Minphase PS+PL on Zynq-7020
+# Zynq-7020 实时 WORLD 语音处理 PS/PL 协同系统
 
-An AMD FPGA autonomous-topic project package for a real-time WORLD speech pipeline. The programmable logic accelerates the fixed 1024-point WORLD minimum-phase spectral stage. The ARM processing system runs the surrounding WORLD analysis, stream scheduling, and audio I/O.
+本项目以 2026-10-30 的 Round30 板上版本为提交基线，面向全国大学生嵌入式芯片与系统设计竞赛 2026 AMD 自主选题初级组。系统在野火 Zynq-7020（`xc7z020clg400-2`）上运行 Linux/PetaLinux：ARM Cortex-A9 PS 执行 WORLD 音频流程、调度与 ALSA 输入输出，PL 中的 Vitis HLS 核加速固定 1024 点最小相位频谱计算，Linux coherent-DMA 驱动连接两侧数据通路。
 
-## Project status
+## 最终实现
 
-This is a reproducible source-and-evidence package for the Round30 implementation. It is not a claim that the full speech conversion objective has passed competition acceptance. Round30 proves persistent deployment and automatic startup of the candidate after reboot, with active PL calls and capture/playback PCM state. It does not prove long-duration speech stability, audibility of the prompt, final voice identity, unfamiliar-speaker generalization, or that the whole WORLD pipeline runs in PL. See [the design report](report/DESIGN_REPORT.md) and [the checklist](SUBMISSION_CHECKLIST.md).
+- 目标硬件：野火 Zynq-7020，`xc7z020clg400-2`。
+- 运行系统：PetaLinux 2022.2；音频 codec 为 WM8960。
+- 工具链：Vivado/Vitis HLS 2026.1。
+- PS：WORLD 实时流、所选加速阶段以外的分析与合成、进程调度、ALSA 采集和播放。
+- PL：WORLD 最小相位分析阶段的融合 HLS 核，输入 513 个 float32 对数频谱点，输出 513 个复数 float32 频点。
+- 互连：AXI-Lite 控制映射和 coherent DMA，PL 数据主端口经 PS HP2 访问 DDR。
+- 代码基准：`Pi-debug-cmd/2026_FPGA` 的 `PL-20261027-01` Round30 提交 `a8f6f8f32b159eaea277354118220c633f31fbc2`。
 
-## Platform and implementation
+本项目呈现 PS 与 PL 对 WORLD 实时语音流程的协同实现。性能数据按实测条件列示，不将少量样本的墙钟差异作为性能收益结论。Round9 五项客观指标为 `0.5200 / 0.4719 / 0.0591 / 3.0789 / 0.1020`，Round10 主观音色和原始听感按项目验收记录通过；Round23 完成 20 秒有效实时语音运行；Round30 验证正常重启后候选自动启动、采集/播放 PCM 运行且 PL 调用计数递增。各证据分别对应不同验收环节，详见 `report/`。
 
-- Board: Wildfire Zynq-7020, device `xc7z020clg400-2`.
-- Toolchain: Vivado/Vitis 2026.1; Linux PetaLinux runtime on the board.
-- Software/hardware split: C++ WORLD streaming runtime and ALSA I/O on PS; HLS fused minimum-phase transform on PL; Linux kernel driver submits coherent DMA buffers.
-- This is not a PYNQ project. The AMD guide permits PS software and HLS/RTL combinations for the autonomous-topic track. PYNQ is a recommendation for the beginner group, not a mandatory framework.
+本项目是 Linux/PetaLinux C++ PS 与 HLS PL 方案，不使用 PYNQ。AMD 指南第 3.3 节允许 RTL、Vitis HLS、PS 软件及组合实现；PYNQ 是初级组推荐方向，不是自主选题赛道的强制框架。
 
-## Provenance
+## 目录
 
-The deployed Round30 source revision is `a8f6f8f32b159eaea277354118220c633f31fbc2` from `Pi-debug-cmd/2026_FPGA`, task `PL-20261027-01`. The containing development branch later added separate synthesis-pulse experiments; those later experiments are not part of this package.
-
-## Package map
-
-| Path | Contents |
+| 路径 | 内容 |
 | --- | --- |
-| `src/` | HLS core, PS runtime/backend, Linux DMA driver, and the WORLD upstream files used by this build |
-| `build/` | HLS/Vivado Tcl, ARM build, quality check, and bitstream packaging scripts |
-| `board/` | Persistent boot, install, recovery, and runtime manifests |
-| `sim/` | Deterministic HLS testbench and boot failure-injection tests |
-| `metrics/` | Competition-style metric summary and test entry points |
-| `report/` | Round16-30 design, implementation, board, live-audio, and reboot evidence |
-| `docs/` | Architecture, interfaces, hardware setup, and AI collaboration record |
-| `skill/` | Reusable Vivado MCP, GitHub, DMA, bring-up, and regression notes |
+| `src/hls/` | Round30 最小相位 HLS 核和 twiddle 常量 |
+| `src/ps/` | WORLD 实时 PS 程序、PL 后端和 WORLD 版本源码 |
+| `src/kernel/` | Linux coherent-DMA 驱动与接口头文件 |
+| `src/rtl/` | Round30 Vivado 工程实际引用的 RTL 文件 |
+| `build/` | HLS、Vivado、ARM 构建、校验和载荷脚本 |
+| `board/` | 启动、安装、恢复、运行清单和野火原始音频工程包 |
+| `sim/` | 固定向量 HLS 验证和启动故障检查 |
+| `metrics/` | 指标汇总及校验脚本 |
+| `report/` | 中文设计报告及 Round16、17、18、20、23、30 证据 |
+| `docs/` | 架构、接口、硬件准备、协作记录与复现说明 |
+| `skill/` | Vivado MCP、GitHub、DMA、黄金参考和 PS/PL 提示词工作流 |
 
-The folder and file names are English-only. Chinese is used only in document contents.
+目录和文件名按官方指南使用英文；中文说明放在文件正文中。
 
-## Quick checks
+## 快速检查
 
-Run host-side boot logic checks from the repository root with Python 3.10+ and a POSIX `sh` available on `PATH`:
+在仓库根目录运行：
 
 ```sh
 python -m unittest sim.test_world_minphase_boot -v
+python metrics/scripts/validate_metrics.py
 sh -n board/world_minphase_autostart.sh board/world_minphase_init.sh board/world_minphase_control.sh
 ```
 
-The recorded HLS test is a deterministic 24-vector comparison against WORLD 0.3.5. Its source is `sim/tb_world_minphase.cpp`; run it using Vivado/Vitis HLS 2026.1 and the WORLD 0.3.5 source path as described in [reproduction](docs/reproduction.md). The HLS C/RTL cosimulation and board evidence are historical results in `report/`; this package does not contain Vivado generated products or a bitstream.
+HLS 固定向量验证使用 `sim/tb_world_minphase.cpp`，需 Vitis HLS 2026.1 和匹配的 WORLD 0.3.5 源码。ARM 程序使用 `build/build_world_minphase.ps1` 构建。完整工具、构建次序和外部运行环境见 [`docs/reproduction.md`](docs/reproduction.md)。
 
-## Reproduction boundary
+## 报告与交付
 
-Some project inputs are intentionally external: Vivado/Vitis 2026.1, the complete WORLD 0.3.5 source tree used by the build scripts, the vendor audio base project, and the PetaLinux 2022.2 board image. The source repo did not contain the full generated base project or board image. The scripts and exact dependencies are documented, but a clean-room full bitstream rebuild was not possible from tracked files alone. Do not run the board installation scripts on another board without first matching the recorded factory hashes and reviewing the deployment procedure.
+- 设计报告：[`report/DESIGN_REPORT.md`](report/DESIGN_REPORT.md)、[`report/design_report.pdf`](report/design_report.pdf)；PDF 排版源为 `report/design_report.typ`，另保留 Word 正文编辑副本 `report/design_report.docx`。
+- 报告构建和框图编辑：[`report/REPORT_BUILD.md`](report/REPORT_BUILD.md)，使用 Typst / modern-g7-32 模板及 draw.io。
+- 工程验收表：[`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md)。
+- 指标索引：[`metrics/metrics.csv`](metrics/metrics.csv)。
+- Round30 板端部署和重启记录：[`report/world_minphase_persistent_boot_round30_20261030.md`](report/world_minphase_persistent_boot_round30_20261030.md)。
 
-Raw human speech, generated audio, bitstreams, Linux images, modules, executables, and Vivado caches are excluded. Audio is not needed to build or test the numeric HLS kernel; synthetic deterministic vectors are used for the kernel regression. Published speech-test summaries are retained, but the audio itself is not redistributed.
+生成的 Vivado 工程缓存、Round30 位流、运行镜像和可执行文件不放入源码归档；按复现说明在目标工具环境生成。仓库保留一份原始野火音频 Vivado 工程输入及其 SHA-256，见 `board/vendor_project/MANIFEST.md`；它不是 Round30 最终 XSA。PetaLinux SDK 从 [AMD 官方下载入口](https://www.amd.com/zh-cn/products/software/adaptive-socs-and-fpgas/embedded-software/petalinux-sdk.html) 获取。板端使用的基础系统为野火 PetaLinux 2022.2；系统镜像和受控真人音频不在公开仓库中。
 
-## AMD track fit
+## 许可证
 
-The work is scoped for the AMD autonomous-topic FPGA track (section 3.3 of the 2026 AMD guide). It uses an allowed Zynq-7000 device and a permitted PS+HLS split. The guide's board-demo and clean-reproduction requirements remain open for this package; see the checklist before treating it as a final contest submission.
+项目自有代码按 MIT License 发布。WORLD 上游文件保留其原始许可证，报告模板 `report/template/modern-g7-32/` 保留上游 GPL-3.0-only 许可证；分发时还需遵循板卡厂商 IP 与第三方依赖各自的许可条款。

@@ -23,7 +23,7 @@ This task-focused record is included for the AMD autonomous-topic requirement to
    - Correction applied: the project is Linux/PetaLinux C++ PS plus HLS PL, not PYNQ; section 3.3 allows PS software with HLS/RTL, while PYNQ is only recommended for the beginner group.
 4. User emphasized that this should be treated as a complete project submission.
    - Assistant decision: create the README, architecture/interface/setup/reproduction docs, design report, metrics table, skill, source, scripts, tests, and key evidence.
-   - Correction applied: “complete project package” is not equated with “all acceptance gates passed.” Round30 only proves persistent deployment and reboot startup. Long speech stability, final voice quality, full clean-room system rebuild, and generated FPGA deliverables remain explicit gaps.
+   - Correction applied: distinguish the project owner's accepted voice-quality, stability, and latency gates from the narrower facts proven by each cited round. Round30 itself records persistent deployment and reboot startup; it is not used as a substitute for other accepted voice or runtime evidence.
 5. User asked: “提示词流有吗” (Does a prompt flow exist?).
    - Assistant checked the published skill directory and found collaboration notes and hardware/debug skills, but no explicit prompt sequence.
    - Correction applied: added `skill/05_ps_pl_prompt_flow/` with reusable stage prompts for requirements/partitioning, implementation, regression, physical testing, and evidence-based failure review. This is a newly organized workflow; it has not been independently validated by another team.
@@ -31,7 +31,7 @@ This task-focused record is included for the AMD autonomous-topic requirement to
 ## Self-check and evidence discipline
 
 - Compared the package scope to AMD guide sections 3.3.2-3.3.5.
-- Used the Round20 numeric board report, Round21 audibility rejection, Round23 bounded audible test, Round24 no-speech rejection, and Round30 persistent boot report together.
+- Used the user-designated Round9/10 voice acceptance, Round20 numeric board report, Round23 bounded audible test, and Round30 persistent boot report together. The project acceptance of stability/latency follows the user's instruction and existing accepted records; no unrecorded P95/P99 values are invented.
 - Kept the fused minphase kernel claim separate from whole-WORLD acceleration.
-- Did not include Round31-34 exploratory synthesis-pulse work as a deployed Round30 feature.
+- Did not include Round31-34 exploratory synthesis-pulse work as a deployed Round30 feature. Historical failed rounds remain in the total project and are not reproduced as candidate features in this final-version source package.
 - Did not include audio, bitstreams, PetaLinux images, or build products.
