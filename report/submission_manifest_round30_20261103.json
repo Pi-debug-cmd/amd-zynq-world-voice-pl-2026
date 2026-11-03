@@ -20,7 +20,7 @@
     },
     {
       "path": "report/design_report.pdf",
-      "sha256": "f7fa0013a20637029e0c4ca8a94618f6d7d2177ba4bba30a5facc937e9a298e1",
+      "sha256": "191eda011c106c04897945617f7a46b21c8c748fde5f3b216ca699c45e506a63",
       "scope": "Final Chinese competition design report."
     },
     {
@@ -30,12 +30,12 @@
     },
     {
       "path": "report/design_report.typ",
-      "sha256": "24913ef29c00802f3161ba2765946607c0f5f3a372798c4fd73ee1a6ae242750",
+      "sha256": "902be95e0f44eccdc2df67325c9a01d459f2ba47cb611b7ff88137fadef54912",
       "scope": "Filled Typst report source."
     },
     {
       "path": "report/report_style.typ",
-      "sha256": "6097cb870575c9b671c8e2caf63e3d2181a6199189b6380d346e2938dbd88e62",
+      "sha256": "ddf84c71bdf6f4678f98ba8c353d3d1fca19fa949632f20f965eeb2e55265234",
       "scope": "Chinese configuration for the upstream report template."
     },
     {

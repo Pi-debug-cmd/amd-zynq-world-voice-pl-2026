@@ -1,8 +1,6 @@
 #import "report_style.typ": report, report-table, code
 #show: report
 
-#pagebreak()
-
 本报告说明实际板上运行版本的 PS/PL 分工、数据接口、硬件实现、实测结果、AI 协作过程、技能提炼和复现步骤。系统由 ARM Cortex-A9 PS 执行 WORLD 实时语音流程和音频 I/O，由 HLS PL 核承担 WORLD 中固定 1024 点的融合最小相位频谱计算。
 
 = 一、选题背景与创新点

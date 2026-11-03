@@ -38,7 +38,7 @@ def generate():
     lines = (REPORT / "DESIGN_REPORT.md").read_text(encoding="utf-8").splitlines()
     first = next(i for i, line in enumerate(lines) if line.startswith("# 一、"))
     introduction = next(line for line in lines[:first] if line.startswith("本报告说明"))
-    output = ['#import "report_style.typ": report, report-table, code\n#show: report', "", "#pagebreak()", "", inline(introduction), ""]
+    output = ['#import "report_style.typ": report, report-table, code\n#show: report', "", inline(introduction), ""]
     i = first
     table_index = 0
     widths = ["(1.1fr, 3.7fr)", "(1.0fr, 1.7fr, 3.0fr)", "(1.1fr, 1.3fr, 1.4fr, 2.7fr)", "(0.8fr, 2.3fr, 2.3fr, 2.5fr)", "(1.0fr, 2.6fr, 2.4fr, 2.6fr)"]
