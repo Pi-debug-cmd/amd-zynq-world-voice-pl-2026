@@ -15,18 +15,48 @@
     },
     {
       "path": "report/world_minphase_persistent_boot_round30_20261030.json",
-      "sha256": "5881d96bc56946c0a4958d58e1afe1600f22c9d32a1bd5f432bddbb582793699",
+      "sha256": "c6e59e00a31eced6ef212492bdb682a15c52d6a66da5d444da94b42485edac20",
       "scope": "Round30 board persistent boot and runtime evidence."
     },
     {
       "path": "report/design_report.pdf",
-      "sha256": "c441a0fdce3742e3e2da28ef331998974f5572e692312c0a4bd86c0f001cdb83",
+      "sha256": "f7fa0013a20637029e0c4ca8a94618f6d7d2177ba4bba30a5facc937e9a298e1",
       "scope": "Final Chinese competition design report."
     },
     {
       "path": "report/design_report.docx",
-      "sha256": "fabd9881b892f3c9a002c623146b65ef628e5992cce0fbd5d02f3c4338173af4",
-      "scope": "Editable source for the final design report."
+      "sha256": "7c56bc8794a9c7bb72c9d4178ee8b60362ad8d945d0ce2ed00edb4b67428e496",
+      "scope": "Word content-editing companion; the submitted PDF is built from Typst sources."
+    },
+    {
+      "path": "report/design_report.typ",
+      "sha256": "24913ef29c00802f3161ba2765946607c0f5f3a372798c4fd73ee1a6ae242750",
+      "scope": "Filled Typst report source."
+    },
+    {
+      "path": "report/report_style.typ",
+      "sha256": "6097cb870575c9b671c8e2caf63e3d2181a6199189b6380d346e2938dbd88e62",
+      "scope": "Chinese configuration for the upstream report template."
+    },
+    {
+      "path": "report/architecture_round30.drawio",
+      "sha256": "64ddf9f65e8f62d4b27240cc9cbce0062c7f6af1230789016ee377e56af54ac4",
+      "scope": "Editable draw.io architecture diagram source."
+    },
+    {
+      "path": "report/architecture_round30.svg",
+      "sha256": "b87de4ef77b763a14d0eba70c4d3a5bae969615ebb2682ee7e7b7a2d15e7f5a8",
+      "scope": "Diagram exported by draw.io."
+    },
+    {
+      "path": "report/architecture_round30.png",
+      "sha256": "58fea677221fc6d78c0217760fc448ae7ee9375b4117aea4cebeac27a263ba9e",
+      "scope": "Diagram PNG exported by draw.io, used in PDF and Word."
+    },
+    {
+      "path": "report/template/modern-g7-32/LICENSE",
+      "sha256": "3972dc9744f6499f0f9b2dbf76696f2ae7ad8af9b23dde66d6af86c9dfb36986",
+      "scope": "Upstream GPL-3.0-only report template license."
     }
   ],
   "peta_linux_download": "https://www.amd.com/zh-cn/products/software/adaptive-socs-and-fpgas/embedded-software/petalinux-sdk.html",

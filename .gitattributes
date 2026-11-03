@@ -1,0 +1,9 @@
+*.pdf binary
+*.docx binary
+*.png binary
+*.zip binary
+*.typ text eol=lf
+*.drawio text eol=lf
+*.svg text eol=lf
+*.json text eol=lf
+report/template/modern-g7-32/LICENSE text eol=lf

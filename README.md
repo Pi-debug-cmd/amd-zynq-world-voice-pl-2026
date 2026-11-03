@@ -48,7 +48,8 @@ HLS 固定向量验证使用 `sim/tb_world_minphase.cpp`，需 Vitis HLS 2026.1 
 
 ## 报告与交付
 
-- 设计报告：[`report/DESIGN_REPORT.md`](report/DESIGN_REPORT.md)、[`report/design_report.pdf`](report/design_report.pdf) 和可编辑 Word 版 `report/design_report.docx`。
+- 设计报告：[`report/DESIGN_REPORT.md`](report/DESIGN_REPORT.md)、[`report/design_report.pdf`](report/design_report.pdf)；PDF 排版源为 `report/design_report.typ`，另保留 Word 正文编辑副本 `report/design_report.docx`。
+- 报告构建和框图编辑：[`report/REPORT_BUILD.md`](report/REPORT_BUILD.md)，使用 Typst / modern-g7-32 模板及 draw.io。
 - 工程验收表：[`SUBMISSION_CHECKLIST.md`](SUBMISSION_CHECKLIST.md)。
 - 指标索引：[`metrics/metrics.csv`](metrics/metrics.csv)。
 - Round30 板端部署和重启记录：[`report/world_minphase_persistent_boot_round30_20261030.md`](report/world_minphase_persistent_boot_round30_20261030.md)。
@@ -57,4 +58,4 @@ HLS 固定向量验证使用 `sim/tb_world_minphase.cpp`，需 Vitis HLS 2026.1 
 
 ## 许可证
 
-项目自有代码按 MIT License 发布。WORLD 上游文件保留其原始许可证，分发时还需遵循板卡厂商 IP 与第三方依赖各自的许可条款。
+项目自有代码按 MIT License 发布。WORLD 上游文件保留其原始许可证，报告模板 `report/template/modern-g7-32/` 保留上游 GPL-3.0-only 许可证；分发时还需遵循板卡厂商 IP 与第三方依赖各自的许可条款。
