@@ -33,22 +33,18 @@ WORLD 语音处理包含分析、频谱处理和合成等多个阶段。将完�
 
 输入音频经 WM8960 和 ALSA 到达 PS。PS 运行 WORLD 实时流，对每个分析帧生成 513 个 float32 对数频谱点。默认软件模式由 CPU 计算最小相位频谱；PL 模式通过 `/dev/world_minphase` 向内核驱动提交 coherent-DMA 缓冲区。PL 核返回 513 个复数 float32 频点，PS 随后继续 WORLD 合成，并经 ALSA 和 WM8960 输出。
 
-```text
-麦克风 / WM8960
-      |
-PS ALSA 采集 -> WORLD 分析 -> 最小相位后端选择
-                                  | CPU 软件参考
-                                  | PL 调用
-                                  v
-                       Linux coherent-DMA 驱动
-                                  |
-                       AXI HP2 / PS DDR
-                                  |
-                    HLS 最小相位核（PL）
-                                  |
-                  WORLD 合成 -> PS ALSA 播放
-                                  |
-                           WM8960 输出
+```mermaid
+flowchart LR
+    MIC[麦克风 / WM8960] --> CAP[PS ALSA 采集]
+    CAP --> ANALYZE[WORLD 实时分析]
+    ANALYZE --> SELECT[最小相位后端选择]
+    SELECT -->|CPU 软件参考| SYNTH[WORLD 合成]
+    SELECT -->|PL 调用（PS）| DMA[Linux coherent-DMA 驱动]
+    DMA --> DDR[AXI HP2 / PS DDR]
+    DDR --> HLS[HLS 最小相位核（PL）]
+    HLS -->|513 个复数 float32 频点| SYNTH
+    SYNTH --> PLAY[PS ALSA 播放]
+    PLAY --> OUT[WM8960 输出]
 ```
 
 HLS 核将输入对数频谱映射为 1024 点变换所需的复数最小相位滤波器频点。核内融合两次 FFT 通路以及倒谱、指数、余弦和正弦运算。该设计替代 WORLD 的一个计算阶段；音频采集、WORLD 其他处理、流调度与播放仍由 PS 软件执行。

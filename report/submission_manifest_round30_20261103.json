@@ -20,12 +20,12 @@
     },
     {
       "path": "report/design_report.pdf",
-      "sha256": "7e97669e8fcd082105c2b0c906d0c64691b33fb5dd6f13890499e03de545acf4",
+      "sha256": "bd6ab8d9ab6e13d7452b9cd068b24cffc9bf885e5f6acf87138a2e30430719f1",
       "scope": "Final Chinese competition design report."
     },
     {
       "path": "report/design_report.docx",
-      "sha256": "55ad7d2f0253bceecb61cf46d5619ef0bf009a01ffcfa94f61cee09afc308376",
+      "sha256": "b4d1b48fe8c5dba7687d1c6dec7b65d098d89c9142a7a970635b8708169f3494",
       "scope": "Editable source for the final design report."
     }
   ],
