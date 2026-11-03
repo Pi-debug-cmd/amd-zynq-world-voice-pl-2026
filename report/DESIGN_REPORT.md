@@ -1,6 +1,7 @@
-# 基于 Zynq-7020 的实时 WORLD 语音处理 PS/PL 协同系统
-
-全国大学生嵌入式芯片与系统设计竞赛 2026 AMD 自主选题初级组
+---
+title: 基于 Zynq-7020 的实时 WORLD 语音处理 PS/PL 协同系统
+subtitle: 全国大学生嵌入式芯片与系统设计竞赛 2026 AMD 自主选题初级组
+---
 
 **器件：** 野火 Zynq-7020，`xc7z020clg400-2`
 
@@ -14,7 +15,7 @@
 
 本报告说明实际板上运行版本的 PS/PL 分工、数据接口、硬件实现、实测结果、AI 协作过程、技能提炼和复现步骤。系统由 ARM Cortex-A9 PS 执行 WORLD 实时语音流程和音频 I/O，由 HLS PL 核承担 WORLD 中固定 1024 点的融合最小相位频谱计算。
 
-## 1. 选题背景与创新点
+# 一、选题背景与创新点
 
 WORLD 语音处理包含分析、频谱处理和合成等多个阶段。将完整语音流程一次性迁入可编程逻辑，会扩大接口与数值验证范围，也会使硬件误差、调度开销和音频链路问题难以分开定位。本项目选择输入输出维度固定、可与软件参考逐向量比对的最小相位频谱阶段作为 PS 与 PL 的协作边界。
 
@@ -29,27 +30,15 @@ WORLD 语音处理包含分析、频谱处理和合成等多个阶段。将完�
 
 项目采用已公开的 WORLD 算法与板卡音频接口，不主张新语音模型或新信号处理理论。所报告的时间数据用于说明测试观察，不据两段样本宣称稳定性能收益。
 
-## 2. 设计原理与功能框图
+# 二、设计原理与功能框图
 
 输入音频经 WM8960 和 ALSA 到达 PS。PS 运行 WORLD 实时流，对每个分析帧生成 513 个 float32 对数频谱点。默认软件模式由 CPU 计算最小相位频谱；PL 模式通过 `/dev/world_minphase` 向内核驱动提交 coherent-DMA 缓冲区。PL 核返回 513 个复数 float32 频点，PS 随后继续 WORLD 合成，并经 ALSA 和 WM8960 输出。
 
-```mermaid
-flowchart LR
-    MIC[麦克风 / WM8960] --> CAP[PS ALSA 采集]
-    CAP --> ANALYZE[WORLD 实时分析]
-    ANALYZE --> SELECT[最小相位后端选择]
-    SELECT -->|CPU 软件参考| SYNTH[WORLD 合成]
-    SELECT -->|PL 调用（PS）| DMA[Linux coherent-DMA 驱动]
-    DMA --> DDR[AXI HP2 / PS DDR]
-    DDR --> HLS[HLS 最小相位核（PL）]
-    HLS -->|513 个复数 float32 频点| SYNTH
-    SYNTH --> PLAY[PS ALSA 播放]
-    PLAY --> OUT[WM8960 输出]
-```
+![PS 与 PL 协作的数据流框图](architecture_round30.png){ width=6.1in }
 
 HLS 核将输入对数频谱映射为 1024 点变换所需的复数最小相位滤波器频点。核内融合两次 FFT 通路以及倒谱、指数、余弦和正弦运算。该设计替代 WORLD 的一个计算阶段；音频采集、WORLD 其他处理、流调度与播放仍由 PS 软件执行。
 
-## 3. 软硬件划分依据与接口设计
+# 三、软硬件划分依据与接口设计
 
 固定变换长度和明确的数据维度使该阶段适合硬件实现；PS 则保留需要 Linux 设备访问、动态调度和算法控制的部分。CPU 与 PL 使用同一组 WORLD 接口，因而可以在软件参考、HLS 仿真、板端向量和实时链路之间逐级比对。
 
@@ -70,7 +59,7 @@ HLS 核将输入对数频谱映射为 1024 点变换所需的复数最小相位�
 
 寄存器、数据包布局、超时和 DMA 语义以 `src/kernel/world_minphase_ioctl.h`、`src/kernel/world_minphase_dma.c` 及 HLS/Vivado 工程为准。PL 请求失败会明确报错，不静默伪装成硬件成功；不支持的 FFT 长度按接口契约回退到 CPU 并计数。
 
-## 4. 优化过程与性能/资源对比
+# 四、优化过程与性能/资源对比
 
 优化过程按数值核、核级实现、整机接入、板端对照、实时运行与持久部署推进。表中性能数据保留各自测试边界，不把资源变化或小样本耗时差异转换成未经统计验证的系统加速结论。
 
@@ -90,7 +79,7 @@ Round18 的既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile 和 9 DSP�
 
 每种模式各测两段短文件，墙钟时间只作为本次观察记录，不作为统计稳定的性能收益结论。两条路径的数值接近程度由 SNR 和最大 PCM16 差说明。
 
-## 5. 大模型协作记录
+# 五、大模型协作记录
 
 协作记录按 AMD 指南第 3.3.3.1 和 3.3.5.3 要求，保留关键提示、决策摘要与纠正过程。完整提示工作流模板见 `skill/05_ps_pl_prompt_flow/`，任务级记录见 `docs/ai_collaboration.md`。
 
@@ -102,7 +91,7 @@ Round18 的既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile 和 9 DSP�
 | 结果裁定 | 用户确认 Round9 五项指标、Round10 主观音色和原始听感通过 | 将这些结果与 Round23/30 板端证据分层记录 | 不把音色验收、有限时实时运行、重启持久启动混成同一个测试结论 |
 | 提交整理 | “总代码只关于在板子最终实现的那个版本。” | 逐项检查编译脚本引用、补齐最终路径所需源码和 RTL | 收敛构建入口到 Round30 的最小相位 PL 路径，补入缺失的 HLS/驱动探针源码 |
 
-## 6. 技能包的提炼过程
+# 六、技能包的提炼过程
 
 技能包从项目中的可核查观察提炼，分别说明适用范围、操作方法、失效条件和证据。它们不替代目标器件上的新一轮仿真、实现或上板检查。
 
@@ -114,11 +103,11 @@ Round18 的既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile 和 9 DSP�
 | Vivado MCP / GitHub | 以 Tcl 和日志为构建入口，按任务编号记录提交，PR 核对变更和证据 | 本项目 Vivado/HLS 脚本、Round17/18 报告及协作记录 | MCP 会话与 GitHub 策略依赖具体环境，迁移时需核验版本和权限 |
 | PS/PL 提示词流 | 按需求划分、实现、验证、现场测试和失败复核顺序组织模型任务 | 本项目 Round16-30 的接口与证据链 | 模板本身尚无独立团队前向复用记录；不能把提示词输出当作验证结果 |
 
-技能原始文件位于 `skill/`。Round24 的有效语音帧数检查、Round29/30 的进程归属和 PCM 释放处理被保留为测试设计经验，避免把退出码、无声运行或旧状态误判成通过证据。
+技能原始文件位于 `skill/`。测试流程保留有效语音帧检查、Round29/30 进程归属确认和 PCM 释放处理，保证验收结论对应实际运行状态。
 
-## 7. 复现说明
+# 七、复现说明
 
-### 7.1 主机端构建
+## 7.1 主机端构建
 
 1. 克隆本仓库并核对源实现基线与当前提交。安装 Vivado/Vitis HLS 2026.1、`xc7z020clg400-2` 器件库和对应 ARM hard-float 交叉编译器。
 2. 获取 WORLD 0.3.5 源码。构建脚本核对 `src/common.cpp` SHA-256；将 `WORLD_HLS_PROJECT` 指向短路径。
@@ -127,11 +116,11 @@ Round18 的既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile 和 9 DSP�
 5. 运行 `build/build_world_minphase.ps1 -WorldRoot <WORLD目录> -Target arm -Compiler <ARM-G++> -MinphasePl` 构建板端 PS 程序和最小相位 DMA 探针。省略 `-MinphasePl` 可构建 CPU 软件参考。
 6. 使用与目标板内核完全匹配的 PetaLinux kernel source/build 目录，运行 `build/build_world_minphase_driver.sh` 构建 Linux 驱动。
 
-### 7.2 板端运行与验收
+## 7.2 板端运行与验收
 
 板端环境为野火 PetaLinux 2022.2。PetaLinux SDK 获取入口为 [AMD 官方 PetaLinux 页面](https://www.amd.com/zh-cn/products/software/adaptive-socs-and-fpgas/embedded-software/petalinux-sdk.html)。将生成的驱动、PS 程序、HLS/PL 位流及配置按 `board/` 内 manifest、安装和恢复说明部署。任何写启动配置的动作前都要核对板卡身份、工厂文件 SHA-256 和回退条件；录音、播放或试听需由现场操作者确认准备。
 
-### 7.3 回归命令和证据
+## 7.3 回归命令和证据
 
 ```sh
 python -m unittest sim.test_world_minphase_boot -v
@@ -141,4 +130,4 @@ sh -n board/world_minphase_autostart.sh board/world_minphase_init.sh board/world
 
 数值核结果见 Round16/17/18/20 报告，Round23 记录 20 秒有效语音运行，Round30 记录正常重启后的 `READY_CANDIDATE`、采集/播放 PCM 状态和 PL 调用增长。Round9/10 的音色验收按项目最终确认信息列示：身份、P10、泄漏、UTMOS、CER 分别为 `0.5200`、`0.4719`、`0.0591`、`3.0789`、`0.1020`；Round10 主观音色与原始听感通过。
 
-Round23 和 Round30 的现有板端信息按项目验收口径用于实时运行、稳定性与启动结论。报告中的数值严格对应原始记录；本项目不将未采集的 P95/P99 值写成实测数据。
+按项目最终验收口径，Round23 的有效语音运行记录与 Round30 的重启后持续调用和双 PCM 运行记录作为实时性、稳定性及启动通过的依据。报告中的数值严格对应原始记录；本项目不将未采集的 P95/P99 值写成实测数据。
