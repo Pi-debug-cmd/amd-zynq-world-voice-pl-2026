@@ -48,3 +48,17 @@
 - 报告链接：`report/document_layout_review_20261103.md` 的 2026-11-04 核验条目。
 - 交付：`report/design_report.pdf`，并复制到 `D:/嵌赛提交/基于 ZYNQ-7020 的低延迟固定目标人物人声转换系统设计报告.pdf`。
 - 下一责任方：维护者审阅现有 PR #2。
+
+## DOCS-20261104-02 最终版本优化对比
+
+- 日期：2026-11-04；角色：Hardware-A / Codex；状态：CLAIMED。
+- 基准提交：`5640423`；实现基线仍为 Round30。
+- 改动路径：`report/DESIGN_REPORT.md`、生成的 Typst/PDF、报告构建脚本的表题及排版核验记录。
+- 任务：第四章加入 Round23、Round29 与最终 Round30 对比，最终行加粗；以已有板端记录说明自动启动、PCM 释放及状态管理改进。
+- 复现：`python build/render_design_report.py --typst /path/to/typst`，Poppler 渲染核验。
+- 量化结果：待 PDF 校验；不产生新板测或性能数据。
+- 下一责任方：Codex 完成内容与排版核验后更新 PR #2。
+- 状态更新：ACCEPTED（内容与排版核验通过）。PDF 5 页；新增三行对比，Round30 整行加粗；第 1—2 页渲染一致，其他章节文本一致。
+- 证据：`report/document_layout_review_20261103.md` 的最终版本对比核验条目；数值来自现有 Round23/29/30 报告。
+- 交付：仓库 PDF 与提交目录的“基于 ZYNQ-7020 的低延迟固定目标人物人声转换系统设计报告_最终版本对比修订版.pdf”已同步；原中文 PDF 被阅读器映射占用，保留原文件。源码 RAR 哈希保持不变，不新增板测结论。
+- 下一责任方：维护者审阅 PR #2。

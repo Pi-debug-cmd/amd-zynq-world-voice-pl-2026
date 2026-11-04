@@ -56,18 +56,23 @@ HLS 核将输入对数频谱映射为 1024 点变换所需的复数最小相位�
 = 四、优化过程与性能/资源对比
 
 
-优化过程按数值核、核级实现、整机接入、板端对照、实时运行与持久部署推进。表中性能数据保留各自测试边界，不把资源变化或小样本耗时差异转换成未经统计验证的系统加速结论。
+最终交付为 #strong[Round30 持久启动版本]。Round16—20 是本方案的数值核、硬件实现与板端对照验证，构成最终方案的验证依据；随后通过 Round23 实时语音运行及 Round29—30 部署迭代，完成从计算核接入到开机自动运行的系统集成。下表按阶段列出结果，最终版本整行加粗。
 
-#report-table((1.0fr, 1.7fr, 3.0fr), [数值验证与资源实现结果], (
+#report-table((1.0fr, 1.7fr, 3.0fr), [优化过程与最终 Round30 版本对比], (
   ([验证层级], [Round / 条件], [结果]),
   ([HLS 数值验证], [Round16，24 组 WORLD 参考向量], [24/24 通过；最大相对 L2 误差 #code("8.53141669193e-7")]),
   ([核级布局布线], [Round17，100 MHz OOC], [4,996 LUT、5,769 FF、3.5 BRAM Tile、38 DSP；WNS #code("+1.327 ns")、WHS #code("+0.053 ns")]),
   ([整机实现], [Round18，Zynq-7020 音频设计], [13,910 LUT、20,145 FF、9.5 BRAM Tile、47 DSP；WNS #code("+0.856 ns")、WHS #code("+0.029 ns")；DRC Error 为 0]),
   ([板端数值], [Round20，24 向量和两段 5 秒文件], [向量 24/24；文件输出 SNR 为 #code("97.371/96.942 dB")，最大 PCM16 差 1，PL fallback/timeout 为 0]),
+  ([实时语音验证], [Round23，20 秒有效讲话], [1,079 个有声帧；PL 调用 4,857 次、fallback 0；录放 xrun、ALSA error 均为 0；用户确认转换效果与 PS 路径类似]),
+  ([持久部署迭代], [Round29，手动启用与重启], [手动启用后双 PCM 运行；重启时开机测试音占用播放设备，尚需完善启动协调]),
+  ([#text(font: ("Times New Roman", "SimHei"), weight: "bold")[#strong[最终上板版本]]], [#text(font: ("Times New Roman", "SimHei"), weight: "bold")[#strong[Round30，正常重启后自动运行]]], [#text(font: ("Times New Roman", "SimHei"), weight: "bold")[#strong[修复开机音频占用及旧状态误判；自动进入 READY\_CANDIDATE；采集/播放 PCM 均 RUNNING；PL 调用由 2,278 增至 13,751，DISABLE 不存在]]]),
 ))
 
 
-Round18 的既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile 和 9 DSP；Round18 最终整机资源及核级资源分别引用对应实现报告，测试对象和约束范围不同，故不把两组资源值简单相减解释为单一核的代价。
+#strong[最终版本的优势在于 PS/PL 协作链路的自动运行与部署完整性。] 相比 Round20 文件对照和 Round23 单次实时试运行，Round30 在正常重启后自动启动转换链路；相比 Round29，启动前精确清理遗留测试音进程、等待 PCM 释放，并清除旧状态，完成启动冲突修复。PS 负责音频与 WORLD 调度，PL 在运行中持续参与最小相位频谱计算。
+
+资源数据来自 Round17 核级与 Round18 整机实现记录，Round30 数据来自持久启动验收，两类结果分别列示。Round18 既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile、9 DSP。最终部署改进依据见 Round29/30 报告；下表保留 Round20 的同输入 CPU/PL 文件对照。
 
 #report-table((1.1fr, 1.3fr, 1.4fr, 2.7fr), [Round20 文件路径对照], (
   ([Round20 文件], [CPU 软件路径], [最小相位 PL 路径], [输出差异]),
@@ -76,7 +81,7 @@ Round18 的既有整机参考为 8,026 LUT、13,283 FF、6 BRAM Tile 和 9 DSP�
 ))
 
 
-每种模式各测两段短文件，墙钟时间只作为本次观察记录，不作为统计稳定的性能收益结论。两条路径的数值接近程度由 SNR 和最大 PCM16 差说明。
+Round20 两条路径的输出 SNR 约 97 dB、最大差 1 PCM16 count，为 PS/PL 数值一致性提供依据；耗时对应本轮两段短文件。Round30 的新增成果是上述自动启动和运行状态管理，未将早期耗时标为 Round30 新测数据。
 
 = 五、大模型协作记录
 

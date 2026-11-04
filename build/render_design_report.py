@@ -42,7 +42,7 @@ def generate():
     i = first
     table_index = 0
     widths = ["(1.1fr, 3.7fr)", "(1.0fr, 1.7fr, 3.0fr)", "(1.1fr, 1.3fr, 1.4fr, 2.7fr)", "(0.8fr, 2.3fr, 2.3fr, 2.5fr)", "(1.0fr, 2.6fr, 2.4fr, 2.6fr)"]
-    captions = ["PS/PL 接口与运行约定", "数值验证与资源实现结果", "Round20 文件路径对照", "大模型协作与纠正记录", "技能包提炼与适用边界"]
+    captions = ["PS/PL 接口与运行约定", "优化过程与最终 Round30 版本对比", "Round20 文件路径对照", "大模型协作与纠正记录", "技能包提炼与适用边界"]
     while i < len(lines):
         line = lines[i].strip()
         if line.startswith("|"):
@@ -54,7 +54,10 @@ def generate():
                 i += 1
             output.append("#report-table(" + widths[table_index] + ", [" + captions[table_index] + "], (")
             for row in rows:
-                output.append("  (" + ", ".join("[" + inline(c) + "]" for c in row) + "),")
+                cells = ["[" + inline(c) + "]" for c in row]
+                if row[0] == "**最终上板版本**":
+                    cells = ['[#text(font: ("Times New Roman", "SimHei"), weight: "bold")' + cell + ']' for cell in cells]
+                output.append("  (" + ", ".join(cells) + "),")
             output.append("))\n")
             table_index += 1
             continue
