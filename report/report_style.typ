@@ -23,7 +23,7 @@
   manager: (position: none, name: none, title: none),
 )
 
-#set document(title: "基于 Zynq-7020 的实时 WORLD 语音处理 PS/PL 协同系统", author: "Pi-debug-cmd contributors")
+#set document(title: "基于 ZYNQ-7020 的低延迟固定目标人物人声转换系统设计报告", author: "Pi-debug-cmd contributors")
 #set text(font: ("Times New Roman", "SimSun"), lang: "zh", hyphenate: false)
 #set par(justify: true, first-line-indent: 0pt, leading: 0.6em, spacing: 0.8em)
 #set page(footer: context {
@@ -37,9 +37,9 @@
 #align(center)[#text(size: 13pt, fill: rgb("4c7f88"), weight: "semibold")[全国大学生嵌入式芯片与系统设计竞赛 2026]]
 #v(18mm)
 #align(center)[
-  #text(size: 21pt, font: "Microsoft YaHei", fill: rgb("203746"), weight: "medium")[基于 Zynq-7020 的实时 WORLD 语音处理]
+  #text(size: 21pt, font: "Microsoft YaHei", fill: rgb("203746"), weight: "medium")[基于 ZYNQ-7020 的低延迟]
   #linebreak()
-  #text(size: 21pt, font: "Microsoft YaHei", fill: rgb("203746"), weight: "medium")[PS/PL 协同系统设计报告]
+  #text(size: 21pt, font: "Microsoft YaHei", fill: rgb("203746"), weight: "medium")[固定目标人物人声转换系统设计报告]
 ]
 #v(13mm)
 #align(center)[#text(size: 13pt, fill: rgb("6f7f86"))[全国大学生嵌入式芯片与系统设计竞赛 AMD 自主选题初级组]]

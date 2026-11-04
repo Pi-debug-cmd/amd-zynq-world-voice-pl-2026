@@ -34,3 +34,17 @@
 - 限制：未重新执行板测或硬件构建；技术报告、PDF/Word、音频、商家基础工程 ZIP、位流及镜像均不在总代码 RAR 中。
 - 报告链接：`report/code_archive_round30_20261103.md`。
 - 下一责任方：维护者分别审阅总代码 RAR 和单独提交的设计报告。
+
+## DOCS-20261104-01 用户指定封面标题
+
+- 日期：2026-11-04；角色：Hardware-A / Codex；状态：CLAIMED。
+- 基准提交：`fb47daf27f6fec91b32f3fd9215b63d462e1f417`。
+- 改动路径：`report/report_style.typ`、`report/DESIGN_REPORT.md`、`report/design_report.pdf`、`report/REPORT_BUILD.md`；仅更新报告标题及相关说明。
+- 复现命令：`python build/render_design_report.py --typst /path/to/typst`。
+- 量化结果：待核验标题、页数及正文页面与改名前的一致性。
+- 限制：不涉及算法、板卡测试；总代码 RAR 不重打。
+- 下一责任方：Codex 导出 PDF 并核验封面。
+- 状态更新：ACCEPTED（封面核验完成）；PDF 5 页，正文 4 页渲染图逐页哈希一致；新标题与 PDF 元数据一致。
+- 报告链接：`report/document_layout_review_20261103.md` 的 2026-11-04 核验条目。
+- 交付：`report/design_report.pdf`，并复制到 `D:/嵌赛提交/基于 ZYNQ-7020 的低延迟固定目标人物人声转换系统设计报告.pdf`。
+- 下一责任方：维护者审阅现有 PR #2。
